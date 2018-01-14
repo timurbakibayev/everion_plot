@@ -1,9 +1,16 @@
+{% load staticfiles %}
 <html>
-    <head>
-        <title>PMA Everion Chart</title>
-    </head>
-    <body>
-        <p>Hi there!</p>
-        <p>It works!</p>
-    </body>
+<head>
+    <title>PMA Everion Chart</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script src="/static/script.js"></script>
+</head>
+<body>
+<form action="/upload.php">
+    <div id="dropZone">
+        Для загрузки, перетащите файл сюда.
+    </div>
+</form>
+</body>
 </html>
