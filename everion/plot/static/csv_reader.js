@@ -69,16 +69,19 @@ function processData(csv) {
     console.log("Current File", currentFile);
     var plotName = "undefined";
     if (currentFile.toLowerCase().indexOf("spo2") > -1)
-        plotName = "Spo2";
+        plotName = "Оксигенация";
+    if (currentFile.toLowerCase().indexOf("steps") > -1)
+        plotName = "Шаги";
     if (globalLabels.length === 0) {
         for (var i = 0; i < lines.length; i++) {
-            if (lines[i]["Time"].substr(-4) === "0:00") {
+            if (lines[i]["Time"].substr(-4) === "0:00" || lines[i]["Time"].substr(-4) === "5:00") {
                 globalLabels.push(lines[i]["Date"] + "/" + lines[i]["Time"]);
             }
         }
     }
     var localData = [];
     var prevValue = 0
+    var maxValue = 0;
     for (var i = 0; i < globalLabels.length; i++) {
         if (!(globalLabels[i] in linesDict)) {
             localData.push({x: i, y: prevValue});
@@ -86,15 +89,24 @@ function processData(csv) {
             var newValue = parseFloat(linesDict[globalLabels[i]]["Value"]);
             localData.push({x: i, y: newValue});
             prevValue = newValue;
+            if (newValue > maxValue)
+                maxValue = newValue;
         }
     }
     console.log(globalLabels, localData);
     var letters = '0123456789ABCDEF';
     var red = ""+Math.floor((Math.random() * 255));
     var green = ""+Math.floor((Math.random() * 255));
+    var yAxis = "A";
+    if (maxValue <= 20)
+        yAxis = "B";
+    if (maxValue <= 1) {
+        yAxis = "C";
+    }
     var newData = {
         label: plotName,
         data: localData,
+        yAxisID: yAxis,
         backgroundColor: [
             'rgba(' + red + ',' + green +', 132, 0.2)',
         ],
