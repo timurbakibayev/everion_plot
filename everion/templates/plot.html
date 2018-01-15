@@ -5,11 +5,17 @@
     <link rel="stylesheet" href="/static/style.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
     <script src="/static/script.js"></script>
+    <script src="/static/chart.js"></script>
+    <script src="/static/csv_reader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
 </head>
 <body>
 <form action="/upload.php">
     <div id="dropZone">
         Для загрузки, перетащите файл сюда.
+    </div>
+    <div style="margin: 5%; height: 80%">
+        <canvas id="myChart" width="800" height="400"></canvas>
     </div>
 </form>
 </body>

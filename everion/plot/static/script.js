@@ -20,18 +20,19 @@ $(document).ready(function () {
         event.preventDefault();
         dropZone.removeClass('hover');
         dropZone.addClass('drop');
-        var file = event.dataTransfer.files[0];
-        if (file.size > maxFileSize) {
-            dropZone.text('Файл слишком большой!');
-            dropZone.addClass('error');
-            return false;
-        }
-        var xhr = new XMLHttpRequest();
-        xhr.upload.addEventListener('progress', uploadProgress, false);
-        xhr.onreadystatechange = stateChange;
-        xhr.open('POST', '/upload.php');
-        xhr.setRequestHeader('X-FILE-NAME', file.name);
-        xhr.send(file);
+        handleFiles(event.dataTransfer.files);
+        // var file = event.dataTransfer.files[0];
+        // if (file.size > maxFileSize) {
+        //     dropZone.text('Файл слишком большой!');
+        //     dropZone.addClass('error');
+        //     return false;
+        // }
+        // var xhr = new XMLHttpRequest();
+        // xhr.upload.addEventListener('progress', uploadProgress, false);
+        // xhr.onreadystatechange = stateChange;
+        // xhr.open('POST', '/upload.php');
+        // xhr.setRequestHeader('X-FILE-NAME', file.name);
+        // xhr.send(file);
     };
 
     function uploadProgress(event) {
