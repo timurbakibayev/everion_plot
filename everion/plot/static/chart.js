@@ -14,6 +14,10 @@ function plot(labels, data) {
                         id: 'A',
                         type: 'linear',
                         position: 'left',
+                    },{
+                        id: 'D',
+                        type: 'linear',
+                        position: 'left',
                     }, {
                         id: 'B',
                         type: 'linear',

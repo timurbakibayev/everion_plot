@@ -48,6 +48,7 @@ function processData(csv) {
     var linesDict = {};
     var header = allTextLines[0].split(',');
     console.log("header", header);
+    var cumulative = 0;
     for (var i = 1; i < allTextLines.length; i++) {
         var data = allTextLines[i].split(',');
         var tarr = {};
@@ -58,7 +59,8 @@ function processData(csv) {
         tarr["DateRaw"] = date;
         tarr["Date"] = formattedDate(date);
         tarr["Time"] = formattedTime(date);
-        tarr["Day of month"] = date.getDay();
+        cumulative += parseFloat(tarr["Value"]);
+        tarr["Cumulative"] = cumulative;
         lines.push(tarr);
         linesDict[tarr["Date"] + "/" + tarr["Time"]] = tarr;
     }
@@ -68,10 +70,27 @@ function processData(csv) {
     // plot("spo2", [{x:"12:50",y:10}, {x:"12:55",y:18},{x:"13:00",y:15},{x:"15:50",y:10}])
     console.log("Current File", currentFile);
     var plotName = "undefined";
+    try {
+        plotName = currentFile.split("_")[2];
+    } catch (err) {
+
+    };
     if (currentFile.toLowerCase().indexOf("spo2") > -1)
         plotName = "Оксигенация";
     if (currentFile.toLowerCase().indexOf("steps") > -1)
         plotName = "Шаги";
+    if (currentFile.toLowerCase().indexOf("activity") > -1)
+        plotName = "Активность";
+    if (currentFile.toLowerCase().indexOf("bperf") > -1)
+        plotName = "Перфузия";
+    if (currentFile.toLowerCase().indexOf("_hr_") > -1)
+        plotName = "Пульс";
+    if (currentFile.toLowerCase().indexOf("_ee_") > -1)
+        plotName = "Калории";
+    if (currentFile.toLowerCase().indexOf("_rr_") > -1)
+        plotName = "Дыхание";
+    if (currentFile.toLowerCase().indexOf("_hrv_") > -1)
+        plotName = "Равномерность Пульса";
     if (globalLabels.length === 0) {
         for (var i = 0; i < lines.length; i++) {
             if (lines[i]["Time"].substr(-4) === "0:00" || lines[i]["Time"].substr(-4) === "5:00") {
@@ -87,6 +106,8 @@ function processData(csv) {
             localData.push({x: i, y: prevValue});
         } else {
             var newValue = parseFloat(linesDict[globalLabels[i]]["Value"]);
+            if (currentFile.toLowerCase().indexOf("steps") > -1)
+                newValue = linesDict[globalLabels[i]]["Cumulative"];
             localData.push({x: i, y: newValue});
             prevValue = newValue;
             if (newValue > maxValue)
@@ -100,9 +121,10 @@ function processData(csv) {
     var yAxis = "A";
     if (maxValue <= 20)
         yAxis = "B";
-    if (maxValue <= 1) {
+    if (maxValue <= 1)
         yAxis = "C";
-    }
+    if (maxValue > 100)
+        yAxis = "D";
     var newData = {
         label: plotName,
         data: localData,
