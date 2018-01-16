@@ -1,9 +1,11 @@
 var currentFile = "";
 var globalLabels = [];
-var globalData = [];
-
-function handleFiles(files) {
+var globalData1 = [];
+var globalData2 = [];
+var globalWhich = 0;
+function handleFiles(files, which) {
     // Check for the various File API support.
+    globalWhich = which;
     if (window.FileReader) {
         // FileReader are supported.
         getAsText(files[0]);
@@ -47,6 +49,12 @@ function processData(csv) {
     var lines = [];
     var linesDict = {};
     var header = allTextLines[0].split(',');
+    var globalData;
+    if (globalWhich === 1) {
+        globalData = globalData1;
+    } else {
+        globalData = globalData2;
+    }
     console.log("header", header);
     var cumulative = 0;
     for (var i = 1; i < allTextLines.length; i++) {
@@ -59,7 +67,7 @@ function processData(csv) {
         tarr["DateRaw"] = date;
         tarr["Date"] = formattedDate(date);
         tarr["Time"] = formattedTime(date);
-        cumulative += parseFloat(tarr["Value"]);
+        cumulative = Math.floor(cumulative/1.5 + parseFloat(tarr["Value"]));
         tarr["Cumulative"] = cumulative;
         lines.push(tarr);
         linesDict[tarr["Date"] + "/" + tarr["Time"]] = tarr;
@@ -74,7 +82,8 @@ function processData(csv) {
         plotName = currentFile.split("_")[2];
     } catch (err) {
 
-    };
+    }
+    ;
     if (currentFile.toLowerCase().indexOf("spo2") > -1)
         plotName = "Оксигенация";
     if (currentFile.toLowerCase().indexOf("steps") > -1)
@@ -116,8 +125,8 @@ function processData(csv) {
     }
     console.log(globalLabels, localData);
     var letters = '0123456789ABCDEF';
-    var red = ""+Math.floor((Math.random() * 255));
-    var green = ""+Math.floor((Math.random() * 255));
+    var red = "" + Math.floor((Math.random() * 255));
+    var green = "" + Math.floor((Math.random() * 255));
     var yAxis = "A";
     if (maxValue <= 20)
         yAxis = "B";
@@ -130,16 +139,16 @@ function processData(csv) {
         data: localData,
         yAxisID: yAxis,
         backgroundColor: [
-            'rgba(' + red + ',' + green +', 132, 0.2)',
+            'rgba(' + red + ',' + green + ', 132, 0.2)',
         ],
         borderColor: [
-            'rgba(' + red + ',' + green +', 132, 1)',
+            'rgba(' + red + ',' + green + ', 132, 1)',
 
         ],
         borderWidth: 1
     };
     globalData.push(newData);
-    plot(globalLabels, globalData)
+    plot(globalLabels, globalData, globalWhich)
 }
 
 function errorHandler(evt) {

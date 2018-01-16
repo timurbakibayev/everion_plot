@@ -20,7 +20,7 @@ $(document).ready(function () {
         event.preventDefault();
         dropZone.removeClass('hover');
         dropZone.addClass('drop');
-        handleFiles(event.dataTransfer.files);
+        handleFiles(event.dataTransfer.files,1);
         // var file = event.dataTransfer.files[0];
         // if (file.size > maxFileSize) {
         //     dropZone.text('Файл слишком большой!');
@@ -50,6 +50,27 @@ $(document).ready(function () {
             }
         }
     }
+
+
+    var dropZone1 = $('#dropZone1');
+
+    dropZone1[0].ondragover = function () {
+        dropZone1.addClass('hover');
+        return false;
+    };
+
+    dropZone1[0].ondragleave = function () {
+        dropZone1.removeClass('hover');
+        return false;
+    };
+
+    dropZone1[0].ondrop = function (event) {
+        event.preventDefault();
+        dropZone1.removeClass('hover');
+        dropZone1.addClass('drop');
+        handleFiles(event.dataTransfer.files,2);
+    };
+
 });
 
 

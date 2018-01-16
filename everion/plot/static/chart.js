@@ -1,6 +1,12 @@
-var globalChart;
-function plot(labels, data) {
+var globalChart1;
+var globalChart2;
+function plot(labels, data, which) {
     var ctx = document.getElementById("myChart").getContext('2d');
+    var globalChart = globalChart1;
+    if (which === 2) {
+        ctx = document.getElementById("myChart2").getContext('2d');
+        globalChart = globalChart2;
+    }
     if (globalChart === undefined) {
         globalChart = new Chart(ctx, {
             type: 'line',
@@ -42,4 +48,8 @@ function plot(labels, data) {
         globalChart.datasets = data;
         globalChart.update();
     }
+    if (which === 2)
+        globalChart2 = globalChart;
+    else
+        globalChart1 = globalChart;
 }

@@ -8,7 +8,7 @@ body {
     text-align: center;
 
     width: 900px;
-    height: 400px;
+    height: 300px;
     padding: 50px 0;
     margin: 50px auto;
 
@@ -19,6 +19,25 @@ body {
     -moz-border-radius: 5px;
     border-radius: 5px;
 }
+
+#dropZone1 {
+    color: #555;
+    font-size: 18px;
+    text-align: center;
+
+    width: 900px;
+    height: 300px;
+    padding: 50px 0;
+    margin: 50px auto;
+
+    background: #eee;
+    border: 1px solid #ccc;
+
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
 
 #dropZone.hover {
     background: #ddd;
