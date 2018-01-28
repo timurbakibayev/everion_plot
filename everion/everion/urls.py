@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.plotter),
     url(r'^api/patients/$', views_rest_patient.patient_list),
+    url(r'^api/patients/(?P<id>[0-9]+)/$', views_rest_patient.patient_details),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

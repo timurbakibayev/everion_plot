@@ -32,3 +32,30 @@ def patient_list(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@method_decorator(csrf_exempt, name='dispatch')
+def patient_details(request, id):
+    user = request.user
+    if user is None:
+        return Response({"detail": "Необходима авторизация"})
+    try:
+        patient = Patient.objects.get(pk=id)
+    except Patient.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = PatientSerializer(patient)
+        return Response(serializer.data)
+
+    if request.method == 'PUT':
+        serializer = PatientSerializer(patient, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        patient.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -39,7 +39,7 @@ class PatientComponent extends Component {
                                 }}> Технология {this.props.technology}</span> : ""
                             }</div>
                     </div>
-                    <div style={{flex: 0.7, backgroundColor: "#DDDDDD"}}>
+                    <div style={{flex: 0.7, backgroundColor: "#F5FFF5", margin: 5}}>
                         Here will be a thumbnail of a chart
                     </div>
                 </div>
