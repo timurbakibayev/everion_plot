@@ -4,67 +4,15 @@ import * as actions from '../actionTypes';
 
 const patientsListReducer = (state = [], action) => {
     switch (action.type) {
-        // case actions.ACTION_PATIENT1_LOADED:
-        //     var newState = [action.data];
-        //     var oldStateUnchanged = [];
-        //     state.forEach(patient => {
-        //         var isThere = newState.filter((item) => (item.id === patient.id));
-        //         if (isThere.length === 0) {
-        //             oldStateUnchanged.push(patient)
-        //         }
-        //     });
-        //     var newArray = oldStateUnchanged.concat(newState);
-        //     newArray.sort(function (a, b) {
-        //         return (a.date_added > b.date_added) ? -1 : ((b.date_added > a.date_added) ? 1 : 0);
-        //     });
-        //     return newArray;
         case actions.ACTION_PATIENTS_CLEAR:
             return [];
         case actions.ACTION_PATIENTS_LOADED:
-            var newState = action.data;
-            var oldStateUnchanged = [];
-            state.forEach(patient => {
-                var isThere = newState.filter((item) => (item.id === patient.id));
-                if (isThere.length === 0) {
-                    oldStateUnchanged.push(patient)
-                }
-            });
-            var newArray = oldStateUnchanged.concat(newState);
-            newArray.sort(function (a, b) {
-                return (a.date_added > b.date_added) ? -1 : ((b.date_added > a.date_added) ? 1 : 0);
-            });
-            return newArray;
-        case actions.ACTION_PATIENT_MARK_AS_READ:
-            var newState = [];
-            state.forEach(patient => {
-                if (patient.id === action.patientId) {
-                    newState.push({...patient, isRead: true})
-                } else {
-                    newState.push(patient)
-                }
-            });
-            console.log("Marked as read", newState);
-            return newState;
+            return action.data;
         default:
             return state;
     }
 };
 
-const countersReducer = (state = {
-                            from_me:0,
-                            open:0,
-                            to_me:0,
-                            unread:0,
-                            closed:0,
-                         }, action) => {
-    switch (action.type) {
-        case actions.ACTION_PATIENT1_LOADED:
-        case actions.ACTION_PATIENTS_LOADED:
-            return action.counters;
-        default:
-            return state;
-    }
-};
 
 const currentPatientReducer = (state = {}, action) => {
     switch (action.type) {
@@ -239,18 +187,9 @@ const filterByTextReducer = (state = "", action) => {
 
 const patientsReducer = combineReducers({
     list: patientsListReducer,
-    counters: countersReducer,
     isLoading: isLoadingReducer,
     isLoadingCurrentPatient: isLoadingCurrentPatientReducer,
-    isPreparing: isPreparingReducer,
-    isCreating: isCreatingReducer,
-    isForwarding: isForwardingReducer,
-    isClosing: isClosingReducer,
     currentPatient: currentPatientReducer,
-    createdPatient: createdPatientReducer,
-    forwardedPatient: forwardedPatientReducer,
-    closedPatient: closedPatientReducer,
-    newPatient: newPatientReducer,
     errorMessage: errorMessageReducer,
     filter: filterReducer,
     filterByText: filterByTextReducer,

@@ -65,7 +65,7 @@ class _PatientCardComponent extends Component {
         return (
             <div key={this.props.patient.id}>
                 <div style={styles.root}>
-                    this.props.patient.name
+                    { this.props.patient.name }
                     <Grid container spacing={24}>
                         <Grid item sm={12} md={6}>
                             Первая колонка
@@ -81,7 +81,7 @@ class _PatientCardComponent extends Component {
 }
 
 const mapStateToProps = (state) => ({
-
+    patient: state.patients.currentPatient,
 });
 
 const mapDispatchToProps = {

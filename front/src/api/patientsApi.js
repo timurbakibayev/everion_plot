@@ -1,9 +1,9 @@
 import {URL} from './url'
 
-export const loadPatients = (filter, startFrom, token) => {
+export const loadPatients = (filter, token) => {
     console.log("Fetching patients");
     return fetch(
-        `${URL}api/patients/?filter=${filter}&start_from=${startFrom}`,
+        `${URL}api/patients/`,
         {
             method: 'GET',
             headers: {

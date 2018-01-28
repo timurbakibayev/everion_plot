@@ -30,22 +30,8 @@ class _PatientsComponent extends Component {
             let itemNo = parseInt(this.props.location.pathname.trim().toLowerCase().match(/patients\/(\d+)/)[1], 10);
             if (this.props.patient.id !== itemNo) {
                 console.log("Loading current patient", itemNo);
-                this.props.loadCurrentPatient(itemNo).then(
-                    (response) => {
-                        console.log("Patient on load current patient", this.props.patient);
-                        if (!this.props.patient.isRead) {
-                            //this.props.refreshPatients();
-                            this.props.markAsRead(this.props.patient.id);
-                            this.props.patient.isRead = true;
-                        }
-                    }
-                );
-                this.props.refreshFiles(itemNo);
-                this.props.refreshFields(itemNo);
-                this.props.refreshJactions(itemNo);
-            }
-            if (this.props.gendirs === null || this.props.gendirs.length === 0) {
-                this.props.refreshGenDirs();
+                this.props.loadCurrentPatient(itemNo);
+                //this.props.refreshReadings(itemNo);
             }
         } else {
             console.log("Loading all patients");
@@ -157,7 +143,9 @@ const mapStateToProps = (state) => ({
     patients: state.patients.list,
     isLoading: state.patients.isLoading,
     isLoadingCurrentPatient: state.patients.isLoadingCurrentPatient,
-    errorMessage: state.patients.errorMessage
+    errorMessage: state.patients.errorMessage,
+    patientsFilterByText: state.patients.filterByText,
+    settings: state.settings,
 });
 
 const mapDispatchToProps = {

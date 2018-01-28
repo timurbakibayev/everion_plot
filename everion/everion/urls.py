@@ -18,8 +18,10 @@ from django.contrib import admin
 from plot import views
 from django.conf.urls.static import static
 from everion import settings
+from plot import views_rest_patient
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.plotter),
+    url(r'^api/patients/$', views_rest_patient.patient_list),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

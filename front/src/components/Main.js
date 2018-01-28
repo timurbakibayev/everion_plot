@@ -36,7 +36,7 @@ import HeaderCaptionComponent from './headerCaptionComponent';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 
-import logo from '../apm.jpg'
+import logo from '../list.png'
 
 const drawerWidth = 200;
 
@@ -52,8 +52,8 @@ const theme = createMuiTheme({
         },
         MuiToolbar: {
             root: {
-                background: '#546E7A',
-                color: '#FBC300',
+                background: '#EEEEEE',
+                color: '#333333',
             }
         },
         MuiButton: {
@@ -247,7 +247,7 @@ class _MainComponent extends Component {
                                 <Toolbar disableGutters>
                                     <img alt=""
                                          src={this.props.settings.logo === undefined ? logo : this.props.settings.logo}
-                                         style={{width: "1.5em", marginRight: "1em", marginLeft: "2em"}}
+                                         style={{height: "2em", marginRight: "1em", marginLeft: "2em"}}
                                          onClick={this.handleToggle.bind(this)}/>
                                     <Typography type="title" color="inherit" style={{flex: 1}}>
                                         <HeaderCaptionComponent path={ this.props.location.pathname }/>

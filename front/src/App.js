@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
+import logo from './apm.jpg';
 import './App.css';
 import MainComponent from './components/Main.js';
 import {HashRouter, Route, Switch} from 'react-router-dom';

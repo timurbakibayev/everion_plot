@@ -10,7 +10,7 @@ import './../general.css'
 import {Link} from 'react-router-dom';
 
 
-class OrderComponent extends Component {
+class PatientComponent extends Component {
     stringClosed = this.props.settings.language === "russian"? "Закрыто":"Closed";
     stringAtWork = this.props.settings.language === "russian"? "В работе у ":"At work, current owner: ";
     stringProjectManager = this.props.settings.language === "russian"? "Менеджер проекта: ":"Project Manager: ";
@@ -24,8 +24,8 @@ class OrderComponent extends Component {
                                image={this.props.img_url}
                     />
                     <div style={{flex: 1}}>
-                        <Link to={`/orders/${this.props.id}`}><CardHeader
-                                title={ this.props.order_header }
+                        <Link to={`/patients/${this.props.id}`}><CardHeader
+                                title={ this.props.name }
                                 avatar={this.props.closed ? (this.props.positive?<ActionDone color="green"/>:<ActionNegative color="red"/>) : <ActionWork/>}
                             /></Link>
                         <div
@@ -37,7 +37,7 @@ class OrderComponent extends Component {
                         }</div>
                     </div>
                     <div style={{margin: "auto", padding: "1em" }}>
-                            {this.props.closed && this.props.positive && <Link to={`/orders/${this.props.id}/clone`}> {this.props.settings.language === "russian"?"Клонировать":"Clone Order"} </Link>}
+                            {this.props.closed && this.props.positive && <Link to={`/patients/${this.props.id}/clone`}> {this.props.settings.language === "russian"?"Клонировать":"Clone Patient"} </Link>}
                     </div>
                     {this.props.emph && <UnreadIcon color="red" style={{margin: "auto", width: "2em", height: "2em", paddingRight: "1em"}}/>}
                     {this.props.unread && <SomeoneUnreadIcon color="red" style={{margin: "auto", width: "2em", height: "2em", paddingRight: "1em"}}/>}
@@ -48,4 +48,4 @@ class OrderComponent extends Component {
 }
 
 
-export default OrderComponent;
+export default PatientComponent;
