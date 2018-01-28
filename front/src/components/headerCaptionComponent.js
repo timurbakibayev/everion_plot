@@ -32,76 +32,7 @@ class _HeaderCaptionComponent extends Component {
                     <span>Loading...</span>)
 
         }
-        if (this.props.path.toLowerCase().search(/patients\/(\d+)\/clone$/) > -1) {
-            let itemNo = parseInt(this.props.path.toLowerCase().match(/patients\/(\d+)\/clone$/)[1],10);
-            console.log("itemNo from regexp", itemNo, this.props);
-            let patientItem = this.props.patient;
-            if (patientItem !== null)
-                return (
-                    this.props.settings.language === "russian"?
-                    <span>Клонирование: { patientItem.patient_header }</span>:
-                    <span>Clone: { patientItem.patient_header }</span>
-                );
-            else
-                return (
-                    this.props.settings.language === "russian"?
-                    <span>Загрузка...</span>:
-                    <span>Loading...</span>
-                )
 
-        }
-        if (this.props.path.toLowerCase().search(/patients\/(\d+)\/forward$/) > -1) {
-            let itemNo = parseInt(this.props.path.toLowerCase().match(/patients\/(\d+)\/forward$/)[1],10);
-            console.log("itemNo from regexp", itemNo, this.props);
-            let patientItem = this.props.patient;
-            if (patientItem !== null)
-                return (this.props.settings.language === "russian"?
-                    <span>Назначение: { patientItem.patient_header }</span>:
-                    <span>Send patient: { patientItem.patient_header }</span>
-                );
-            else
-                return (this.props.settings.language === "russian"?
-                    <span>Загрузка...</span>:
-                    <span>Loading...</span>)
-
-        }
-
-        if (this.props.path.toLowerCase().indexOf("reports/1") > -1)
-            return (
-                this.props.settings.language === "russian"?
-                    <span>Отчет: {actionType.REPORT1}</span>:
-                    <span>Report: {actionType.REPORT1_EN}</span>
-            );
-        if (this.props.path.toLowerCase().indexOf("reports/2") > -1)
-            return (
-                this.props.settings.language === "russian"?
-                    <span>Отчет: {actionType.REPORT2}</span>:
-                    <span>Report: {actionType.REPORT2_EN}</span>
-            );
-        if (this.props.path.toLowerCase().indexOf("patients/to_me") > -1)
-            return (
-                this.props.settings.language === "russian"?
-                <span>Пациенты: {actionType.PATIENTS_TO_ME}</span>:
-                <span>Patients: {actionType.PATIENTS_TO_ME_EN}</span>
-            );
-        if (this.props.path.toLowerCase().indexOf("patients/from_me") > -1)
-            return (
-                this.props.settings.language === "russian"?
-                <span>Пациенты: {actionType.PATIENTS_FROM_ME}</span>:
-                <span>Patients: {actionType.PATIENTS_FROM_ME_EN}</span>
-            );
-        if (this.props.path.toLowerCase().indexOf("patients/closed") > -1)
-            return (
-                this.props.settings.language === "russian"?
-                <span>Пациенты: {actionType.PATIENTS_CLOSED}</span>:
-                <span>Patients: {actionType.PATIENTS_CLOSED_EN}</span>
-            );
-        if (this.props.path.toLowerCase().indexOf("/patients/new") > -1)
-            return (
-                this.props.settings.language === "russian"?
-                <span>{actionType.PATIENT_NEW}</span>:
-                <span>{actionType.PATIENT_NEW_EN}</span>
-            );
 
         if (this.props.path.toLowerCase().indexOf("patients") > -1)
             return (

@@ -14,7 +14,7 @@ import AutoSuggest from '../input/AutoSuggest'
 import './../general.css'
 import {Link} from 'react-router-dom';
 
-
+import Chart from "../Chart";
 import Loading from "../Loading";
 import Typography from 'material-ui/Typography';
 import FileUpload from '../input/FileUpload'
@@ -43,9 +43,7 @@ class _PatientCardComponent extends Component {
 
     constructor(e) {
         super(e);
-        this.state = {
-
-        }
+        this.state = {}
     }
 
     componentWillMount() {
@@ -65,7 +63,7 @@ class _PatientCardComponent extends Component {
         return (
             <div key={this.props.patient.id}>
                 <div style={styles.root}>
-                    { this.props.patient.name }
+                    {this.props.patient.name}
                     <Grid container spacing={24}>
                         <Grid item sm={12} md={6}>
                             Первая колонка
@@ -74,6 +72,7 @@ class _PatientCardComponent extends Component {
                             Вторая колонка
                         </Grid>
                     </Grid>
+                    <Chart data = {{}}/>
                 </div>
             </div>
         );
@@ -84,8 +83,7 @@ const mapStateToProps = (state) => ({
     patient: state.patients.currentPatient,
 });
 
-const mapDispatchToProps = {
-};
+const mapDispatchToProps = {};
 
 const PatientCardComponent = connect(
     mapStateToProps,
