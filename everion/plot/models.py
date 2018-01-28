@@ -8,3 +8,15 @@ class Patient(models.Model):
     def __str__(self):
         return self.name
 
+
+class Reading(models.Model):
+    patient = models.ForeignKey(Patient)
+    type = models.CharField(max_length=30)
+    timestamp = models.IntegerField()
+    time = models.DateTimeField()
+    value = models.FloatField()
+    quality = models.IntegerField()
+
+    def __str__(self):
+        return self.type + ": " + str(self.value)
+

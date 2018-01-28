@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import patientsReducer from './patients';
-import jactionsReducer from './jactions';
+import readingsReducer from './readings';
 import filesReducer from './files';
 import fieldsReducer from './fields';
 import fileUploadReducer from './fileUpload';
@@ -9,7 +9,7 @@ import settingsReducer from './settings';
 
 const mainReducer = combineReducers({
     patients: patientsReducer,
-    jactions: jactionsReducer,
+    readings: readingsReducer,
     fileUpload: fileUploadReducer,
     files: filesReducer,
     fields: fieldsReducer,

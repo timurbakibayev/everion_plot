@@ -2,18 +2,18 @@ import { combineReducers } from 'redux';
 import * as actions from '../actionTypes';
 
 
-const jactionsListReducer = (state = [  ], action) => {
+const readingsListReducer = (state = [  ], action) => {
     switch (action.type) {
-        case actions.ACTION_JACTIONS_LOADED:
+        case actions.ACTION_READINGS_LOADED:
             return action.data;
         default:
             return state;
     }
 };
 
-const jactionsOrderNoReducer = (state = [  ], action) => {
+const readingsOrderNoReducer = (state = [  ], action) => {
     switch (action.type) {
-        case actions.ACTION_JACTIONS_LOADED:
+        case actions.ACTION_READINGS_LOADED:
             return action.orderNo;
         default:
             return state;
@@ -22,10 +22,10 @@ const jactionsOrderNoReducer = (state = [  ], action) => {
 
 const isLoadingReducer = (state = false, action) => {
     switch (action.type) {
-        case actions.ACTION_JACTIONS_STARTED_LOADING:
+        case actions.ACTION_READINGS_STARTED_LOADING:
             return true;
-        case actions.ACTION_JACTIONS_LOADED:
-        case actions.ACTION_JACTIONS_FAILED_TO_LOAD:
+        case actions.ACTION_READINGS_LOADED:
+        case actions.ACTION_READINGS_FAILED_TO_LOAD:
             return false;
         default:
             return state;
@@ -34,20 +34,20 @@ const isLoadingReducer = (state = false, action) => {
 
 const errorMessageReducer = (state = "", action) => {
     switch (action.type) {
-        case actions.ACTION_JACTIONS_FAILED_TO_LOAD:
+        case actions.ACTION_READINGS_FAILED_TO_LOAD:
             return action.data;
-        case actions.ACTION_JACTIONS_STARTED_LOADING:
+        case actions.ACTION_READINGS_STARTED_LOADING:
             return "";
         default:
             return state;
     }
 };
 
-const jactionsReducer = combineReducers({
-    list: jactionsListReducer,
-    orderNo: jactionsOrderNoReducer,
+const readingsReducer = combineReducers({
+    list: readingsListReducer,
+    orderNo: readingsOrderNoReducer,
     isLoading: isLoadingReducer,
     errorMessage: errorMessageReducer,
 });
 
-export default jactionsReducer;
+export default readingsReducer;

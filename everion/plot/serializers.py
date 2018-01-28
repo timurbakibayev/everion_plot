@@ -14,3 +14,14 @@ class PatientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
         fields = ('id', 'name', 'birthday')
+
+
+class ReadingSerializer(serializers.ModelSerializer):
+    #caption = serializers.SerializerMethodField("in_caption")
+
+    #def in_caption(self, field):
+    #    return str(field.field_name)
+
+    class Meta:
+        model = Patient
+        fields = ('timestamp','time','type','value','quality')

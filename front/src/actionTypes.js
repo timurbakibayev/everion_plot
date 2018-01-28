@@ -9,9 +9,9 @@ export const ACTION_COMPANY_SAVING = "company_saving";
 export const ACTION_COMPANY_SAVED = "compant_saved";
 export const ACTION_COMPANY_FAILED_TO_SAVE = "company_save_failed";
 
-export const ACTION_JACTIONS_STARTED_LOADING = "jactions_loading";
-export const ACTION_JACTIONS_LOADED = "jactions_loaded";
-export const ACTION_JACTIONS_FAILED_TO_LOAD = "jactions_failed_to_load";
+export const ACTION_READINGS_STARTED_LOADING = "readings_loading";
+export const ACTION_READINGS_LOADED = "readings_loaded";
+export const ACTION_READINGS_FAILED_TO_LOAD = "readings_failed_to_load";
 export const ACTION_FILE_STARTED_UPLOADING = "file_started_uploading";
 export const ACTION_FILE_UPLOADED = "file_uploaded";
 export const ACTION_FILE_FAILED_TO_UPLOAD = "file_failed_to_upload";
