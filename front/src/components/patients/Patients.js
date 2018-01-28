@@ -82,7 +82,7 @@ class _PatientsComponent extends Component {
         var the_counter = (this.props.location.pathname.toLowerCase() === "/patients/closed"?"closed":"open");
         var patients = this.patientsSet();
 
-        return (<div>
+        return (<div style={{background: 'url("/static/grid.png") repeat-x', backgroundColor: "#FBFAFC", minHeight: "500px"}}>
             {patients.map(this.renderPatient.bind(this))}
         </div>)
     }
