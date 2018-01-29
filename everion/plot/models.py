@@ -4,7 +4,7 @@ from django.db import models
 class Patient(models.Model):
     name = models.CharField(max_length=200)
     birthday = models.DateField(null=True, blank=True)
-    last_update = models.CharField(max_length=19, default="2018-01-01T01:00:00")
+    last_update = models.CharField(max_length=19, default="2018-01-20T01:00:00")
 
     def __str__(self):
         return self.name

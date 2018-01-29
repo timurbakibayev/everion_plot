@@ -19,6 +19,9 @@ export default class Chart extends Component {
                             position: 'left',
                         }, {
                             id: 'D',
+                            ticks: {
+                                beginAtZero: true
+                            },
                             type: 'linear',
                             position: 'left',
                         }, {
@@ -26,6 +29,7 @@ export default class Chart extends Component {
                             type: 'linear',
                             position: 'right',
                             ticks: {
+                                beginAtZero: true,
                                 max: 20,
                                 min: 0
                             }
@@ -34,6 +38,7 @@ export default class Chart extends Component {
                             type: 'linear',
                             position: 'right',
                             ticks: {
+                                beginAtZero: true,
                                 max: 1,
                                 min: 0
                             }
