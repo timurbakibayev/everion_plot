@@ -160,9 +160,15 @@ class _MainComponent extends Component {
             openR: false,
             anchorEl: undefined,
             settingsClicked: 0,
-            hr: true,
-        }
+            hr: localStorage.getItem("hr") === "1",
+            rr: localStorage.getItem("rr") === "1",
+            spo2: localStorage.getItem("spo2") === "1",
+            activity: localStorage.getItem("activity") === "1",
+            bperf: localStorage.getItem("bperf") === "1",
+            hrv: localStorage.getItem("hrv") === "1",
+        };
     };
+
 
     handleToggle() {
         this.setState({
@@ -216,7 +222,7 @@ class _MainComponent extends Component {
                                 <div style={{zoom: 0.7}} className={classes.drawerInner}>
                                     <Divider/>
                                     <List className={classes.list}>
-                                        <ListSubheader>{this.props.settings.language === "russian" ? "Пациенты" : "Patients"}</ListSubheader>
+                                        <ListSubheader>Пациенты</ListSubheader>
                                         <Link to="/patients">
                                             <ListItem button>
                                                 <ListItemIcon>
@@ -225,15 +231,53 @@ class _MainComponent extends Component {
                                                 <ListItemText
                                                     primary={this.props.settings.language === "russian" ?
                                                         `Пациенты` :
-                                                        `Patients`
+                                                        `Все пациенты`
                                                     }/>
                                             </ListItem>
                                         </Link>
                                         <Divider/>
-                                        <ListSubheader>{this.props.settings.language === "russian" ? "Фильтры" : "Filters"}</ListSubheader>
+                                        <ListSubheader>Фильтры</ListSubheader>
 
-                                        <ListItem button onClick={()=>{console.log("click"); this.setState({hr: !this.state.hr})}}>
-                                            <Checkbox label="hr" checked={this.state.hr} />Пульс
+                                        <ListItem button onClick={() => {
+                                            localStorage.setItem("hr", this.state.hr ? "0" : "1");
+                                            this.setState({hr: !this.state.hr});
+                                        }}>
+                                            <Checkbox label="hr" checked={this.state.hr}/>Пульс
+                                        </ListItem>
+
+                                        <ListItem button onClick={() => {
+                                            localStorage.setItem("rr", this.state.rr ? "0" : "1");
+                                            this.setState({rr: !this.state.rr});
+                                        }}>
+                                            <Checkbox label="rr" checked={this.state.rr}/>Дыхание
+                                        </ListItem>
+
+                                        <ListItem button onClick={() => {
+                                            localStorage.setItem("spo2", this.state.spo2 ? "0" : "1");
+                                            this.setState({spo2: !this.state.spo2});
+                                        }}>
+                                            <Checkbox label="spo2" checked={this.state.spo2}/>Кислород
+                                        </ListItem>
+
+                                        <ListItem button onClick={() => {
+                                            localStorage.setItem("activity", this.state.activity ? "0" : "1");
+                                            this.setState({activity: !this.state.activity});
+                                        }}>
+                                            <Checkbox label="activity" checked={this.state.activity}/>Активность
+                                        </ListItem>
+
+                                        <ListItem button onClick={() => {
+                                            localStorage.setItem("bperf", this.state.bperf ? "0" : "1");
+                                            this.setState({bperf: !this.state.bperf});
+                                        }}>
+                                            <Checkbox label="bperf" checked={this.state.bperf}/>Перфузия
+                                        </ListItem>
+
+                                        <ListItem button onClick={() => {
+                                            localStorage.setItem("hrv", this.state.hrv ? "0" : "1");
+                                            this.setState({hrv: !this.state.hrv});
+                                        }}>
+                                            <Checkbox label="hrv" checked={this.state.hrv}/>Равномерность
                                         </ListItem>
 
                                     </List>
@@ -257,8 +301,8 @@ class _MainComponent extends Component {
                             <main className={classNames(classes.content, this.state.open && classes.contentShift)}>
                                 <div>
                                     <Switch>
-                                        <Route exact path='/' component={PatientsComponent}/>
-                                        <Route path='/patients' component={PatientsComponent}/>
+                                        <Route exact path='/' component={PatientsComponent} mainState={this.state}/>
+                                        <Route path='/patients' component={PatientsComponent} mainState={this.state}/>
                                     </Switch>
                                 </div>
                             </main>

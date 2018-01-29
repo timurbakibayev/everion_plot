@@ -49,12 +49,12 @@ class _PatientCardComponent extends Component {
         super(e);
         this.state = {
             datasets: [], labels: [], show: {
-                "Пульс": true,
-                "Дыхание": true,
-                "Кислород": false,
-                "Активность": false,
-                "Перфузия": true,
-                "Равномерность": false,
+                "Пульс": localStorage.getItem("hr")==="1",
+                "Дыхание": localStorage.getItem("rr")==="1",
+                "Кислород": localStorage.getItem("spo2")==="1",
+                "Активность": localStorage.getItem("activity")==="1",
+                "Перфузия": localStorage.getItem("bperf")==="1",
+                "Равномерность": localStorage.getItem("hrv")==="1",
             }
         }
     }
