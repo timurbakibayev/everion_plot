@@ -9,6 +9,8 @@ tz = pytz.timezone('Asia/Almaty')
 def plotter(request):
     return render(request, 'plot.html', {})
 
+def index(request):
+    return render(request, 'index.html', {})
 
 def generate_hr(prev):
     if prev < 90:

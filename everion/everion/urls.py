@@ -23,7 +23,8 @@ from plot import views_rest_reading
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.plotter),
+    url(r'^$', views.index),
+    url(r'plot^$', views.plotter),
     url(r'^generate$', views.generate_dummies),
     url(r'^api/patients/$', views_rest_patient.patient_list),
     url(r'^api/patients/(?P<id>[0-9]+)/$', views_rest_patient.patient_details),
