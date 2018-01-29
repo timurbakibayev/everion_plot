@@ -25,4 +25,5 @@ class ReadingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reading
-        fields = ('time_epoch','time','time_iso', 'value_hr')
+        fields = ('time_epoch','time','time_iso', 'value_hr', 'value_spo2', 'value_activity',
+                  'value_bperf', 'value_rr', 'value_hrv')

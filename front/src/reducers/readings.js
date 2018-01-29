@@ -7,7 +7,9 @@ const readingsListReducer = (state = [  ], action) => {
         case actions.ACTION_READINGS_STARTED_LOADING:
             return [];
         case actions.ACTION_READINGS_LOADED:
-            return action.data;
+            return action.data.sort((a,b) => {
+                return a.time_iso > b.time_iso?1:-1
+            });
         default:
             return state;
     }

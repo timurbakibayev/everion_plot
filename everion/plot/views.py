@@ -26,6 +26,11 @@ def generate_dummies(request):
         end = datetime.datetime.now()
         current = start
         value_hr = 80
+        value_spo2 = 96 # 93 - 99
+        value_activity = 0.78 # 0.2 - 6
+        value_bperf = 0.35 #+- 0.5
+        value_rr = 18 #+- 10
+        value_hrv = 20 #12 - 42
         while current <= end:
             value_hr = generate_hr(value_hr)
             current += datetime.timedelta(minutes=5)

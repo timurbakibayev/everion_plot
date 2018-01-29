@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PatientsComponent from "./patients/Patients"
 import {HashRouter, Switch, Route, Link} from 'react-router-dom';
+import Checkbox from 'material-ui/Checkbox'
 import {createMuiTheme, MuiThemeProvider} from 'material-ui/styles';
 import orange from 'material-ui/colors/orange';
 import classNames from 'classnames';
@@ -22,7 +23,7 @@ import NewCompanyIcon from 'material-ui-icons/FiberNew';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import {withStyles} from 'material-ui/styles';
 
-import ActionReceipt from  'material-ui-icons/Assignment';
+import ActionReceipt from 'material-ui-icons/Assignment';
 import SocialDomain from 'material-ui-icons/Domain';
 import Menu, {MenuItem} from 'material-ui/Menu';
 import IconButton from 'material-ui/IconButton/IconButton';
@@ -159,6 +160,7 @@ class _MainComponent extends Component {
             openR: false,
             anchorEl: undefined,
             settingsClicked: 0,
+            hr: true,
         }
     };
 
@@ -212,13 +214,13 @@ class _MainComponent extends Component {
                                 onClick={() => {
                                 }}>
                                 <div style={{zoom: 0.7}} className={classes.drawerInner}>
-                                    <Divider />
+                                    <Divider/>
                                     <List className={classes.list}>
                                         <ListSubheader>{this.props.settings.language === "russian" ? "Пациенты" : "Patients"}</ListSubheader>
                                         <Link to="/patients">
                                             <ListItem button>
                                                 <ListItemIcon>
-                                                    <ActionReceipt />
+                                                    <ActionReceipt/>
                                                 </ListItemIcon>
                                                 <ListItemText
                                                     primary={this.props.settings.language === "russian" ?
@@ -227,19 +229,13 @@ class _MainComponent extends Component {
                                                     }/>
                                             </ListItem>
                                         </Link>
-                                        <div style={{visibility: (this.props.is_staff ? "visible" : "hidden")}}>
-                                            <Divider />
-                                            <ListSubheader>{this.props.settings.language === "russian" ? "Отчеты" : "Reports"}</ListSubheader>
-                                            <Link to="/reports/1">
-                                                <ListItem button>
-                                                    <ListItemIcon>
-                                                        <ReportIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText
-                                                        primary={this.props.settings.language === "russian" ? actionType.REPORT1 : actionType.REPORT1_EN}/>
-                                                </ListItem>
-                                            </Link>
-                                        </div>
+                                        <Divider/>
+                                        <ListSubheader>{this.props.settings.language === "russian" ? "Фильтры" : "Filters"}</ListSubheader>
+
+                                        <ListItem button onClick={()=>{console.log("click"); this.setState({hr: !this.state.hr})}}>
+                                            <Checkbox label="hr" checked={this.state.hr} />Пульс
+                                        </ListItem>
+
                                     </List>
                                 </div>
                             </Drawer>
@@ -250,7 +246,7 @@ class _MainComponent extends Component {
                                          style={{height: "2em", marginRight: "1em", marginLeft: "2em"}}
                                          onClick={this.handleToggle.bind(this)}/>
                                     <Typography type="title" color="inherit" style={{flex: 1}}>
-                                        <HeaderCaptionComponent path={ this.props.location.pathname }/>
+                                        <HeaderCaptionComponent path={this.props.location.pathname}/>
                                     </Typography>
                                     <div style={{float: "right", marginRight: "2em"}}>
                                         {this.sideMenu()}
@@ -259,10 +255,10 @@ class _MainComponent extends Component {
                             </AppBar>
 
                             <main className={classNames(classes.content, this.state.open && classes.contentShift)}>
-                                <div >
+                                <div>
                                     <Switch>
-                                        <Route exact path='/' component={ PatientsComponent }/>
-                                        <Route path='/patients' component={ PatientsComponent }/>
+                                        <Route exact path='/' component={PatientsComponent}/>
+                                        <Route path='/patients' component={PatientsComponent}/>
                                     </Switch>
                                 </div>
                             </main>

@@ -47,36 +47,113 @@ class _PatientCardComponent extends Component {
 
     constructor(e) {
         super(e);
-        this.state = {data: {}}
+        this.state = {
+            datasets: [], labels: [], show: {
+                "Пульс": true,
+                "Дыхание": true,
+                "Кислород": false,
+                "Активность": false,
+                "Перфузия": true,
+                "Равномерность": false,
+            }
+        }
     }
 
     drawChart() {
         let newLabels = [];
         let data_hr = [];
+        let data_spo2 = [];
+        let data_activity = [];
+        let data_bperf = [];
+        let data_rr = [];
+        let data_hrv = [];
         const data = this.props.readings;
         for (let i = 0; i < data.length; i++) {
             data_hr.push({x: i, y: data[i].value_hr});
-            newLabels.push(data[i].time_iso);
+            data_spo2.push({x: i, y: data[i].value_spo2});
+            data_activity.push({x: i, y: data[i].value_activity});
+            data_bperf.push({x: i, y: data[i].value_bperf});
+            data_rr.push({x: i, y: data[i].value_rr});
+            data_hrv.push({x: i, y: data[i].value_hrv});
+            newLabels.push(data[i].time_iso.replace("T",", "));
         }
         console.log(newLabels);
         this.setState({
-            data: {
-                labels: newLabels,
-                yAxis: "A",
-                datasets: [
+            labels: newLabels,
+            datasets: [
                     {
-                        label: "heart rate",
+                        label: "Пульс",
+                        yAxisID: "A",
                         data: data_hr,
                         backgroundColor: [
                             'rgba(180,35,132, 0.2)',
                         ],
                         borderColor: [
-                            'rgba(180,35,132, 1)',
+                            'rgba(180,35,132, 0.7)',
+
+                        ],
+                    },
+                    {
+                        yAxisID: "D",
+                        label: "Кислород",
+                        data: data_spo2,
+                        backgroundColor: [
+                            'rgba(35,35,132, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgba(35,35,132, 0.4)',
+
+                        ],
+                    },
+                    {
+                        yAxisID: "B",
+                        label: "Активность",
+                        data: data_activity,
+                        backgroundColor: [
+                            'rgba(35,132,52, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgba(35,132,52, 0.4)',
+
+                        ],
+                    },
+                    {
+                        yAxisID: "C",
+                        label: "Перфузия",
+                        data: data_bperf,
+                        backgroundColor: [
+                            'rgba(85,132,52, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgba(85,132,52, 0.4)',
+
+                        ],
+                    },
+                    {
+                        yAxisID: "B",
+                        label: "Дыхание",
+                        data: data_rr,
+                        backgroundColor: [
+                            'rgba(85,132,252, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgba(85,132,252, 0.4)',
+
+                        ],
+                    },
+                    {
+                        yAxisID: "A",
+                        label: "Равномерность",
+                        data: data_rr,
+                        backgroundColor: [
+                            'rgba(185,132,252, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgba(185,132,252, 0.4)',
 
                         ],
                     },
                 ]
-            }
         })
     }
 
@@ -107,6 +184,11 @@ class _PatientCardComponent extends Component {
 
     render() {
         console.log("PatientCard props", this.props);
+        let datasets = [];
+        for (var i = 0; i < this.state.datasets.length; i++) {
+            if (this.state.show[this.state.datasets[i].label])
+                datasets.push(this.state.datasets[i]);
+        }
         return (
             <div key={this.props.patient.id}>
                 <div style={styles.root}>
@@ -117,7 +199,10 @@ class _PatientCardComponent extends Component {
                         <Grid item sm={12} md={6}>
                         </Grid>
                     </Grid>
-                    <Chart data={this.state.data}/>
+                    <Chart data={{
+                        datasets: datasets,
+                        labels: this.state.labels
+                    }}/>
                 </div>
             </div>
         );
