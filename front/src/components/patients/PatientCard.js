@@ -23,6 +23,7 @@ import Collapse from 'material-ui/transitions/Collapse';
 
 import Table, {TableBody, TableCell, TableHead, TableRow} from 'material-ui/Table';
 
+import * as actions from "../../actions/readings";
 
 const styles = {
     root: {
@@ -38,18 +39,64 @@ const styles = {
     },
 };
 
+var t;
+
 class _PatientCardComponent extends Component {
     loading = this.props.settings.language === "russian" ? "Загружается..." : "Loading...";
+    t = false;
 
     constructor(e) {
         super(e);
-        this.state = {}
+        this.state = {data: {}}
+    }
+
+    drawChart() {
+        let newLabels = [];
+        let data_hr = [];
+        const data = this.props.readings;
+        for (let i = 0; i < data.length; i++) {
+            data_hr.push({x: i, y: data[i].value_hr});
+            newLabels.push(data[i].time_iso);
+        }
+        console.log(newLabels);
+        this.setState({
+            data: {
+                labels: newLabels,
+                yAxis: "A",
+                datasets: [
+                    {
+                        label: "heart rate",
+                        data: data_hr,
+                        backgroundColor: [
+                            'rgba(180,35,132, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgba(180,35,132, 1)',
+
+                        ],
+                    },
+                ]
+            }
+        })
     }
 
     componentWillMount() {
         //this.props.refreshCurrentCompany(this.props.patientItem.company);
         this.setState({mounted: true});
         console.log("PatientCard Component Will Mount", this.props);
+        this.props.refreshReadings(this.props.id).then(
+            response => {
+                t = false
+            }
+        );
+    }
+
+
+    componentWillUpdate() {
+        if (!t) {
+            t = true;
+            this.drawChart();
+        }
     }
 
     onBreakpointChange = (breakpoint) => {
@@ -66,13 +113,11 @@ class _PatientCardComponent extends Component {
                     {this.props.patient.name}
                     <Grid container spacing={24}>
                         <Grid item sm={12} md={6}>
-                            Первая колонка
                         </Grid>
                         <Grid item sm={12} md={6}>
-                            Вторая колонка
                         </Grid>
                     </Grid>
-                    <Chart data = {{}}/>
+                    <Chart data={this.state.data}/>
                 </div>
             </div>
         );
@@ -81,9 +126,12 @@ class _PatientCardComponent extends Component {
 
 const mapStateToProps = (state) => ({
     patient: state.patients.currentPatient,
+    readings: state.readings.list,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+    refreshReadings: actions.refreshReadings,
+};
 
 const PatientCardComponent = connect(
     mapStateToProps,

@@ -14,7 +14,7 @@ class App extends Component {
             <div className="App" style={{height: '100%'}}>
                 <header className="App-header">
                     <img src={logo} className="App-logo" alt="logo"/>
-                    <h1 className="App-title">ClouDoc Service</h1>
+                    <h1 className="App-title">ClouDoc Web Service</h1>
                 </header>
                 <HashRouter>
                     <Switch>

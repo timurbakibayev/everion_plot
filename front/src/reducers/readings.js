@@ -4,6 +4,8 @@ import * as actions from '../actionTypes';
 
 const readingsListReducer = (state = [  ], action) => {
     switch (action.type) {
+        case actions.ACTION_READINGS_STARTED_LOADING:
+            return [];
         case actions.ACTION_READINGS_LOADED:
             return action.data;
         default:
@@ -11,14 +13,6 @@ const readingsListReducer = (state = [  ], action) => {
     }
 };
 
-const readingsOrderNoReducer = (state = [  ], action) => {
-    switch (action.type) {
-        case actions.ACTION_READINGS_LOADED:
-            return action.orderNo;
-        default:
-            return state;
-    }
-};
 
 const isLoadingReducer = (state = false, action) => {
     switch (action.type) {
@@ -45,7 +39,6 @@ const errorMessageReducer = (state = "", action) => {
 
 const readingsReducer = combineReducers({
     list: readingsListReducer,
-    orderNo: readingsOrderNoReducer,
     isLoading: isLoadingReducer,
     errorMessage: errorMessageReducer,
 });

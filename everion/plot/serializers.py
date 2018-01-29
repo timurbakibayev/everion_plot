@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from plot.models import Patient
+from plot.models import Reading
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from bs4 import BeautifulSoup
@@ -23,5 +24,5 @@ class ReadingSerializer(serializers.ModelSerializer):
     #    return str(field.field_name)
 
     class Meta:
-        model = Patient
-        fields = ('timestamp','time','type','value','quality')
+        model = Reading
+        fields = ('time_epoch','time','time_iso', 'value_hr')

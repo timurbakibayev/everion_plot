@@ -9,7 +9,37 @@ export default class Chart extends Component {
                 width={100}
                 height={50}
                 options={{
-                    maintainAspectRatio: true
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+                            id: 'A',
+                            type: 'linear',
+                            position: 'left',
+                        }, {
+                            id: 'D',
+                            type: 'linear',
+                            position: 'left',
+                        }, {
+                            id: 'B',
+                            type: 'linear',
+                            position: 'right',
+                            ticks: {
+                                max: 20,
+                                min: 0
+                            }
+                        }, {
+                            id: 'C',
+                            type: 'linear',
+                            position: 'right',
+                            ticks: {
+                                max: 1,
+                                min: 0
+                            }
+                        }]
+                    },
+                    maintainAspectRatio: true,
                 }}
             />
         )

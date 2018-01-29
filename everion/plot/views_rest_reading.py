@@ -23,7 +23,8 @@ def reading_list(request,id):
     #    return Response({"detail": "Необходима авторизация"})
 
     if request.method == 'GET':
-        readings = Reading.objects.filter(patient_id=id)
+        readings = Reading.objects.filter(patient_id=id).order_by('-time_iso')[:200]
+
         serializer = ReadingSerializer(readings, many=True, context={"request": request})
         return Response(serializer.data)
 
