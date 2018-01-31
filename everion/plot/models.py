@@ -23,5 +23,5 @@ class Reading(models.Model):
     value_hrv = models.IntegerField(default=20)
 
     def __str__(self):
-        return self.type + ": " + str(self.value)
+        return str(self.value_hr) + ": " + str(self.value_hrv)
 

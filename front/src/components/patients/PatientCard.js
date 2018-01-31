@@ -77,7 +77,7 @@ class _PatientCardComponent extends Component {
             data_hrv.push({x: i, y: data[i].value_hrv});
             newLabels.push(data[i].time_iso.replace("T",", "));
         }
-        console.log(newLabels);
+        //console.log(newLabels);
         this.setState({
             labels: newLabels,
             datasets: [
@@ -144,7 +144,7 @@ class _PatientCardComponent extends Component {
                     {
                         yAxisID: "A",
                         label: "Равномерность",
-                        data: data_rr,
+                        data: data_hrv,
                         backgroundColor: [
                             'rgba(185,132,252, 0.2)',
                         ],
@@ -160,7 +160,7 @@ class _PatientCardComponent extends Component {
     componentWillMount() {
         //this.props.refreshCurrentCompany(this.props.patientItem.company);
         this.setState({mounted: true});
-        console.log("PatientCard Component Will Mount", this.props);
+        //console.log("PatientCard Component Will Mount", this.props);
         this.props.refreshReadings(this.props.id).then(
             response => {
                 t = false
@@ -183,7 +183,7 @@ class _PatientCardComponent extends Component {
     };
 
     render() {
-        console.log("PatientCard props", this.props);
+        //console.log("PatientCard props", this.props);
         let datasets = [];
         for (var i = 0; i < this.state.datasets.length; i++) {
             if (this.state.show[this.state.datasets[i].label])
