@@ -7,7 +7,7 @@ class LoadingComponent extends Component {
     render() {
         return (
             <div className="loading">
-                <CircularProgress color="accent" size={50} />
+                <CircularProgress size={50} />
             </div>
 
         );

@@ -23,7 +23,18 @@ def reading_list(request,id):
     #    return Response({"detail": "Необходима авторизация"})
 
     if request.method == 'GET':
-        readings = Reading.objects.filter(patient_id=id).order_by('-time_iso')[:200]
+        print("Request",request.GET["date_from"])
+        if "date_from" not in request.GET or \
+            "date_to" not in request.GET or \
+            "time_from" not in request.GET or \
+            "time_to" not in request.GET:
+            readings = Reading.objects.filter(patient_id=id).order_by('-time_iso')[:200]
+        else:
+            filter_from = request.GET["date_from"] + "T" + request.GET["time_from"]
+            filter_to = request.GET["date_to"] + "T" + request.GET["time_to"]
+            readings = Reading.objects.filter(patient_id=id). \
+                filter(time_iso__gte=filter_from). \
+                filter(time_iso__lte=filter_to).order_by('-time_iso')[:1000]
 
         serializer = ReadingSerializer(readings, many=True, context={"request": request})
         return Response(serializer.data)
