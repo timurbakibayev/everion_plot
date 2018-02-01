@@ -8,14 +8,20 @@ import requests
 
 
 class PatientSerializer(serializers.ModelSerializer):
-    # caption = serializers.SerializerMethodField("in_caption")
+    thumbnail = serializers.SerializerMethodField("in_thumbnail")
 
-    # def in_caption(self, field):
-    #    return str(field.field_name)
+    def in_thumbnail(self, patient):
+        readings = Reading.objects.filter(patient_id=patient.id).order_by('-time_iso')[:100]
+        t = ""
+        for reading in readings:
+            if len(t) > 0:
+                t += ","
+            t += str(reading.value_hr)
+        return t
 
     class Meta:
         model = Patient
-        fields = ('id', 'name', 'birthday',
+        fields = ('id', 'name', 'birthday', 'thumbnail',
                   'limits_hr_min', 'limits_hr_max',
                   'limits_spo2_min', 'limits_spo2_max',
                   'limits_bperf_min', 'limits_bperf_max',

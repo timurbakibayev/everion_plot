@@ -25,6 +25,9 @@ import Table, {TableBody, TableCell, TableHead, TableRow} from 'material-ui/Tabl
 
 import * as actions from "../../actions/readings";
 import * as actionsPatients from "../../actions/patients";
+import Button from "material-ui/Button";
+
+const debounce = require('lodash/debounce');
 
 const styles = {
     root: {
@@ -50,13 +53,14 @@ class _PatientCardComponent extends Component {
         super(e);
         this.state = {
             datasets: [], labels: [], show: {
-                "Пульс": localStorage.getItem("hr")==="1",
-                "Дыхание": localStorage.getItem("rr")==="1",
-                "Кислород": localStorage.getItem("spo2")==="1",
-                "Активность": localStorage.getItem("activity")==="1",
-                "Перфузия": localStorage.getItem("bperf")==="1",
-                "Равномерность": localStorage.getItem("hrv")==="1",
-            }
+                "Пульс": localStorage.getItem("hr") === "1",
+                "Дыхание": localStorage.getItem("rr") === "1",
+                "Кислород": localStorage.getItem("spo2") === "1",
+                "Активность": localStorage.getItem("activity") === "1",
+                "Перфузия": localStorage.getItem("bperf") === "1",
+                "Равномерность": localStorage.getItem("hrv") === "1",
+            },
+            body: {},
         }
     }
 
@@ -76,85 +80,85 @@ class _PatientCardComponent extends Component {
             data_bperf.push({x: i, y: data[i].value_bperf});
             data_rr.push({x: i, y: data[i].value_rr});
             data_hrv.push({x: i, y: data[i].value_hrv});
-            newLabels.push(data[i].time_iso.replace("T",", "));
+            newLabels.push(data[i].time_iso.replace("T", ", "));
         }
         //console.log(newLabels);
         return ({
             labels: newLabels,
             datasets: [
-                    {
-                        label: "Пульс",
-                        yAxisID: "A",
-                        data: data_hr,
-                        backgroundColor: [
-                            'rgba(180,35,132, 0.2)',
-                        ],
-                        borderColor: [
-                            'rgba(180,35,132, 0.7)',
+                {
+                    label: "Пульс",
+                    yAxisID: "A",
+                    data: data_hr,
+                    backgroundColor: [
+                        'rgba(180,35,132, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(180,35,132, 0.7)',
 
-                        ],
-                    },
-                    {
-                        yAxisID: "D",
-                        label: "Кислород",
-                        data: data_spo2,
-                        backgroundColor: [
-                            'rgba(35,35,132, 0.2)',
-                        ],
-                        borderColor: [
-                            'rgba(35,35,132, 0.4)',
+                    ],
+                },
+                {
+                    yAxisID: "D",
+                    label: "Кислород",
+                    data: data_spo2,
+                    backgroundColor: [
+                        'rgba(35,35,132, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(35,35,132, 0.4)',
 
-                        ],
-                    },
-                    {
-                        yAxisID: "B",
-                        label: "Активность",
-                        data: data_activity,
-                        backgroundColor: [
-                            'rgba(35,132,52, 0.2)',
-                        ],
-                        borderColor: [
-                            'rgba(35,132,52, 0.4)',
+                    ],
+                },
+                {
+                    yAxisID: "B",
+                    label: "Активность",
+                    data: data_activity,
+                    backgroundColor: [
+                        'rgba(35,132,52, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(35,132,52, 0.4)',
 
-                        ],
-                    },
-                    {
-                        yAxisID: "C",
-                        label: "Перфузия",
-                        data: data_bperf,
-                        backgroundColor: [
-                            'rgba(85,132,52, 0.2)',
-                        ],
-                        borderColor: [
-                            'rgba(85,132,52, 0.4)',
+                    ],
+                },
+                {
+                    yAxisID: "C",
+                    label: "Перфузия",
+                    data: data_bperf,
+                    backgroundColor: [
+                        'rgba(85,132,52, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(85,132,52, 0.4)',
 
-                        ],
-                    },
-                    {
-                        yAxisID: "B",
-                        label: "Дыхание",
-                        data: data_rr,
-                        backgroundColor: [
-                            'rgba(85,132,252, 0.2)',
-                        ],
-                        borderColor: [
-                            'rgba(85,132,252, 0.4)',
+                    ],
+                },
+                {
+                    yAxisID: "B",
+                    label: "Дыхание",
+                    data: data_rr,
+                    backgroundColor: [
+                        'rgba(85,132,252, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(85,132,252, 0.4)',
 
-                        ],
-                    },
-                    {
-                        yAxisID: "A",
-                        label: "Равномерность",
-                        data: data_hrv,
-                        backgroundColor: [
-                            'rgba(185,132,252, 0.2)',
-                        ],
-                        borderColor: [
-                            'rgba(185,132,252, 0.4)',
+                    ],
+                },
+                {
+                    yAxisID: "A",
+                    label: "Равномерность",
+                    data: data_hrv,
+                    backgroundColor: [
+                        'rgba(185,132,252, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(185,132,252, 0.4)',
 
-                        ],
-                    },
-                ]
+                    ],
+                },
+            ]
         })
     }
 
@@ -178,6 +182,11 @@ class _PatientCardComponent extends Component {
             currentBreakpoint: breakpoint
         });
     };
+
+    saveData = (body) => {
+        this.props.putPatient(this.props.patient.id, body);
+        console.log("bounce");
+    }
 
     render() {
         //console.log("PatientCard props", this.props);
@@ -204,19 +213,128 @@ class _PatientCardComponent extends Component {
                 </div>
                 <div style={{width: "100%"}}>
                     Нормы для пациента {this.props.patient.name}
+                    <div style={{height: "2em"}}/>
                     <Grid container spacing={24}>
-                        <Grid item sm={12} md={6}>Пульс</Grid>
+
+                        <Grid item sm={12} md={6}>Пульс:</Grid>
                         <Grid item sm={12} md={6}>
-                            <TextField  style={{width: "5em"}}
-                                        type="number"
-                                value={""+this.props.patient.limits_hr_min}
-                                onChange={(event) => {console.log("Changed to value " +
-                                    (parseFloat(event.target.value)+1))}}/> -
+                            от <span> </span>
                             <TextField style={{width: "5em"}}
                                        type="number"
-                                value={""+this.props.patient.limits_hr_max}/>
+                                       defaultValue={"" + this.props.patient.limits_hr_min}
+                                       onChange={(event) => {
+                                           this.setState({
+                                               body: {
+                                                   ...this.state.body,
+                                                   limits_hr_min: parseFloat(event.target.value)
+                                               }
+                                           })
+                                       }}/> до <span> </span>
+                            <TextField style={{width: "5em"}}
+                                       type="number"
+                                       defaultValue={"" + this.props.patient.limits_hr_max}
+                                       onChange={(event) => {
+                                           this.setState({
+                                               body: {
+                                                   ...this.state.body,
+                                                   limits_hr_max: parseFloat(event.target.value)
+                                               }
+                                           })
+                                       }}
+                            />
+                        </Grid>
+
+                        <Grid item sm={12} md={6}>Насыщенность кислородом:</Grid>
+                        <Grid item sm={12} md={6}>
+                            от <span> </span>
+                            <TextField style={{width: "5em"}}
+                                       type="number"
+                                       defaultValue={"" + this.props.patient.limits_spo2_min}
+                                       onChange={(event) => {
+                                           this.setState({
+                                               body: {
+                                                   ...this.state.body,
+                                                   limits_spo2_min: parseFloat(event.target.value)
+                                               }
+                                           })
+                                       }}/> до <span> </span>
+                            <TextField style={{width: "5em"}}
+                                       type="number"
+                                       defaultValue={"" + this.props.patient.limits_spo2_max}
+                                       onChange={(event) => {
+                                           this.setState({
+                                               body: {
+                                                   ...this.state.body,
+                                                   limits_spo2_max: parseFloat(event.target.value)
+                                               }
+                                           })
+                                       }}
+                            />
+                        </Grid>
+
+                        <Grid item sm={12} md={6}>Перфузия:</Grid>
+                        <Grid item sm={12} md={6}>
+                            от <span> </span>
+                            <TextField style={{width: "5em"}}
+                                       type="number"
+                                       defaultValue={"" + this.props.patient.limits_bperf_min}
+                                       onChange={(event) => {
+                                           this.setState({
+                                               body: {
+                                                   ...this.state.body,
+                                                   limits_bperf_min: parseFloat(event.target.value)
+                                               }
+                                           })
+                                       }}/> до <span> </span>
+                            <TextField style={{width: "5em"}}
+                                       type="number"
+                                       defaultValue={"" + this.props.patient.limits_bperf_max}
+                                       onChange={(event) => {
+                                           this.setState({
+                                               body: {
+                                                   ...this.state.body,
+                                                   limits_bperf_max: parseFloat(event.target.value)
+                                               }
+                                           })
+                                       }}
+                            />
+                        </Grid>
+
+                        <Grid item sm={12} md={6}>Дыхание:</Grid>
+                        <Grid item sm={12} md={6}>
+                            от <span> </span>
+                            <TextField style={{width: "5em"}}
+                                       type="number"
+                                       defaultValue={"" + this.props.patient.limits_rr_min}
+                                       onChange={(event) => {
+                                           this.setState({
+                                               body: {
+                                                   ...this.state.body,
+                                                   limits_rr_min: parseFloat(event.target.value)
+                                               }
+                                           })
+                                       }}/> до <span> </span>
+                            <TextField style={{width: "5em"}}
+                                       type="number"
+                                       defaultValue={"" + this.props.patient.limits_rr_max}
+                                       onChange={(event) => {
+                                           this.setState({
+                                               body: {
+                                                   ...this.state.body,
+                                                   limits_rr_max: parseFloat(event.target.value)
+                                               }
+                                           })
+                                       }}
+                            />
                         </Grid>
                     </Grid>
+                    <div style={{height: "2em"}}/>
+                    {Object.keys(this.state.body).length > 0 && <Button onClick={
+                        (event) => {
+                            this.saveData(this.state.body);
+                        }
+                    }>Сохранить</Button>}
+                    <div style={{height: "5em"}}/>
                 </div>
             </div>
         );

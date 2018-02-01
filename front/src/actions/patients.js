@@ -83,14 +83,10 @@ export const loadCurrentPatient = (id) => async (dispatch, getState) => {
 };
 
 
-export const putCurrentPatient = (body) => async (dispatch, getState) => {
-
-    dispatch({
-        type: actionTypes.ACTION_PATIENT1_STARTED_LOADING
-    });
+export const putCurrentPatient = (id, body) => async (dispatch, getState) => {
 
     try {
-        const response = await api.putCurrentPatient(getState().patients.currentPatient.id, body, getState().auth.auth.token);
+        const response = await api.putCurrentPatient(id, body, getState().auth.auth.token);
         const text = await response.text();
         console.log("trying to parse 1 patient...", response);
         if (response.status === 200) {

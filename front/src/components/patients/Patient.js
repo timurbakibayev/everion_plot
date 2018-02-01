@@ -8,6 +8,7 @@ import UnreadIcon from 'material-ui-icons/NewReleases'
 import SomeoneUnreadIcon from 'material-ui-icons/Mail'
 import './../general.css'
 import {Link} from 'react-router-dom';
+import Chart from '../Thumbnail'
 
 
 class PatientComponent extends Component {
@@ -18,12 +19,25 @@ class PatientComponent extends Component {
 
 
     render() {
+        //let data_str = this.props.patient.thumbnail.split(",");
+        var data_hr_str = this.props.thumbnail.split(",");
+        let data_hr = [];
+        let labels = [];
+        for (var i = 0; i < data_hr_str.length; i++) {
+            data_hr.push({x:i, y:parseInt(data_hr_str[i])});
+            labels.push(i);
+        }
+        let hr = {label:"Пульс",data:data_hr, borderColor: [
+                        'rgba(180,35,35, 0.5)',
+                    ],backgroundColor: [
+                        'rgba(180,35,35, 0.1)',
+                    ],};
         return (
             <Card className="CompanyCard" style={{fontWeight: this.props.emph ? "bolder" : "normal"}}>
                 <div className="details" style={{display: "flex", flexDirection: "row", flex: 1}}>
-                    <CardMedia className="avatar" style={{width: 20}}
-                               image={this.props.img_url}
-                    />
+                    {/*<CardMedia className="avatar" style={{width: 20}}*/}
+                               {/**/}
+                    {/*/>*/}
                     <div style={{flex: 0.3}}>
                         <Link to={`/patients/${this.props.id}`}><CardHeader
                             title={<h1>{this.props.name}</h1>}
@@ -39,8 +53,11 @@ class PatientComponent extends Component {
                                 }}> Технология {this.props.technology}</span> : ""
                             }</div>
                     </div>
-                    <div style={{flex: 0.7, backgroundColor: "#F5FFF5", margin: 5}}>
-                        Here will be a thumbnail of a chart
+                    <div style={{flex: 0.7, backgroundColor: "#F5FFF5"}}>
+                        <Chart data = {{
+                            datasets: [hr],
+                            labels: labels,
+                        }}/>
                     </div>
                 </div>
             </Card>
