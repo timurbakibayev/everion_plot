@@ -24,8 +24,10 @@ class PatientComponent extends Component {
         let data_hr = [];
         let labels = [];
         for (var i = 0; i < data_hr_str.length; i++) {
-            data_hr.push({x:i, y:parseInt(data_hr_str[i])});
-            labels.push(i);
+            if (parseInt(data_hr_str[i]) !== 0) {
+                data_hr.push({x: i, y: parseInt(data_hr_str[i])});
+                labels.push(i);
+            }
         }
         let hr = {label:"Пульс",data:data_hr, borderColor: [
                         'rgba(180,35,35, 0.5)',
