@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.timezone import now as timezone_now
+import os
 
 # Create your models here.
 class Patient(models.Model):
@@ -34,3 +36,25 @@ class Reading(models.Model):
     def __str__(self):
         return str(self.value_hr) + ": " + str(self.value_hrv)
 
+
+def upload_to(instance, filename):
+    now = timezone_now()
+    filename_base, filename_ext = os.path.splitext(filename)
+    return 'my_uploads/{}_{}{}'.format(
+        now.strftime("%Y_%m_%d/%H%M%S"),
+        filename_base,
+        filename_ext.lower()
+    )
+
+
+class Attachment(models.Model):
+    parent_id = models.CharField(max_length=18)
+    file_name = models.CharField(max_length=255)
+    attachment = models.FileField(upload_to=upload_to)
+    user_id = models.IntegerField(default=-1)
+
+    def __str__(self):
+        return self.file_name
+
+    class Meta:
+        ordering = ["-file_name"]

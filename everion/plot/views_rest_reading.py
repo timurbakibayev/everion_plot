@@ -23,20 +23,29 @@ def reading_list(request,id):
     #    return Response({"detail": "Необходима авторизация"})
 
     if request.method == 'GET':
+        for_output = []
         print("Request",request.GET["date_from"])
         if "date_from" not in request.GET or \
             "date_to" not in request.GET or \
             "time_from" not in request.GET or \
             "time_to" not in request.GET:
             readings = Reading.objects.filter(patient_id=id).order_by('-time_iso')[:200]
+            for reading in readings:
+                for_output.append(reading)
         else:
             filter_from = request.GET["date_from"] + "T" + request.GET["time_from"]
             filter_to = request.GET["date_to"] + "T" + request.GET["time_to"]
             readings = Reading.objects.filter(patient_id=id). \
                 filter(time_iso__gte=filter_from). \
-                filter(time_iso__lte=filter_to).order_by('-time_iso')[:1000]
+                filter(time_iso__lte=filter_to).order_by('-time_iso')
+            skip = len(readings) // 400
+            i = 0
+            for reading in readings:
+                i += 1
+                if skip == 0 or i % skip == 0:
+                    for_output.append(reading)
 
-        serializer = ReadingSerializer(readings, many=True, context={"request": request})
+        serializer = ReadingSerializer(for_output, many=True, context={"request": request})
         return Response(serializer.data)
 
     if request.method == 'POST':

@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from everion import settings
 from plot import views_rest_patient
 from plot import views_rest_reading
+from plot import views_rest_file
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -29,4 +30,5 @@ urlpatterns = [
     url(r'^api/patients/$', views_rest_patient.patient_list),
     url(r'^api/patients/(?P<id>[0-9]+)/$', views_rest_patient.patient_details),
     url(r'^api/patients/(?P<id>[0-9]+)/readings/$', views_rest_reading.reading_list),
+    url(r'^api/patients/(?P<pk>[0-9]+)/files/upload/(?P<filename>.+)$', views_rest_file.FileUploadView.as_view()),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

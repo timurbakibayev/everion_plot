@@ -72,14 +72,53 @@ class _PatientCardComponent extends Component {
         let data_bperf = [];
         let data_rr = [];
         let data_hrv = [];
+        let last_hr = 0
+        let last_rr = 0
+        let last_spo2 = 0
+        let last_activity = 0
+        let last_bperf = 0
+        let last_hrv = 0
+
         const data = this.props.readings;
         for (let i = 0; i < data.length; i++) {
-            data_hr.push({x: i, y: data[i].value_hr});
-            data_spo2.push({x: i, y: data[i].value_spo2});
-            data_activity.push({x: i, y: data[i].value_activity});
-            data_bperf.push({x: i, y: data[i].value_bperf});
-            data_rr.push({x: i, y: data[i].value_rr});
-            data_hrv.push({x: i, y: data[i].value_hrv});
+
+            if (data[i].value_hr !== 0) {
+                data_hr.push({x: i, y: data[i].value_hr});
+                last_hr = data[i].value_hr;
+            } else
+                data_hr.push({x: i, y: last_hr});
+
+            if (data[i].value_rr !== 0) {
+                data_rr.push({x: i, y: data[i].value_rr});
+                last_rr = data[i].value_rr;
+            } else
+                data_rr.push({x: i, y: last_rr});
+
+            if (data[i].value_bperf !== 0) {
+                data_bperf.push({x: i, y: data[i].value_bperf});
+                last_bperf = data[i].value_bperf;
+            } else
+                data_bperf.push({x: i, y: last_bperf});
+
+            if (data[i].value_spo2 !== 0) {
+                data_spo2.push({x: i, y: data[i].value_spo2});
+                last_spo2 = data[i].value_spo2;
+            } else
+                data_spo2.push({x: i, y: last_spo2});
+
+            if (data[i].value_activity !== 0) {
+                data_activity.push({x: i, y: data[i].value_activity});
+                last_activity = data[i].value_activity;
+            } else
+                data_activity.push({x: i, y: last_activity});
+
+            if (data[i].value_hrv !== 0) {
+                data_hrv.push({x: i, y: data[i].value_hrv});
+                last_hrv = data[i].value_hrv;
+            } else
+                data_hrv.push({x: i, y: last_hrv});
+
+
             newLabels.push(data[i].time_iso.replace("T", ", "));
         }
         //console.log(newLabels);
@@ -197,8 +236,8 @@ class _PatientCardComponent extends Component {
                 datasets.push(data.datasets[i]);
         }
         return (
-            <div key={this.props.patient.id}>
-                <div style={styles.root}>
+            <div key={this.props.patient.id} onDragOver={this.preventDefault} onDrop={this.drop}>
+                <div style={styles.root} >
                     {this.props.patient.name}
                     <Grid container spacing={24}>
                         <Grid item sm={12} md={6}>
@@ -209,7 +248,7 @@ class _PatientCardComponent extends Component {
                     <Chart data={{
                         datasets: datasets,
                         labels: data.labels
-                    }}/>
+                    }} />
                 </div>
                 <div style={{width: "100%"}}>
                     Нормы для пациента {this.props.patient.name}
@@ -334,7 +373,9 @@ class _PatientCardComponent extends Component {
                             this.saveData(this.state.body);
                         }
                     }>Сохранить</Button>}
-                    <div style={{height: "5em"}}/>
+                    <div style={{height: "2em"}}/>
+                    <FileUpload/>
+                    <div style={{height: "2em"}}/>
                 </div>
             </div>
         );

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../actions/fileUpload';
+import * as actionsReadings from '../../actions/readings';
 import '../general.css'
 import TextField from 'material-ui/TextField';
 import Saving from '../Saving'
@@ -15,13 +16,11 @@ class _FileUploadComponent extends Component {
         e.preventDefault();
         if (e.target.file.files[0]) {
             console.log("Submitting", e.target.file.files[0]);
-            this.props.uploadFile(this.props.orderNo, e.target.file.files[0])
+            this.props.uploadFile(this.props.patient.id, e.target.file.files[0])
                 .then(response => {
-                    this.props.refreshFiles(this.props.orderNo)
+                    this.props.refreshReadings(this.props.patient.id)
                 })
                 .then(response => {
-                    this.props.refreshJactions(this.props.orderNo)
-                }).then(response => {
                 this.setState({success: true})
             });
         } else
@@ -51,13 +50,14 @@ class _FileUploadComponent extends Component {
 
 
 const mapStateToProps = (state) => ({
-    orderNo: state.jactions.orderNo,
+    patient: state.patients.currentPatient,
     isUploading: state.fileUpload.isUploading,
     errorMessage: state.fileUpload.errorMessage,
 });
 
 const mapDispatchToProps = {
     uploadFile: actions.requestUploadFile,
+    refreshReadings: actionsReadings.refreshReadings,
 };
 
 const FileUploadComponent = connect(
