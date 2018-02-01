@@ -59,7 +59,7 @@ class _PatientCardComponent extends Component {
         }
     }
 
-    drawChart() {
+    getChart() {
         let newLabels = [];
         let data_hr = [];
         let data_spo2 = [];
@@ -78,7 +78,7 @@ class _PatientCardComponent extends Component {
             newLabels.push(data[i].time_iso.replace("T",", "));
         }
         //console.log(newLabels);
-        this.setState({
+        return ({
             labels: newLabels,
             datasets: [
                     {
@@ -170,10 +170,6 @@ class _PatientCardComponent extends Component {
 
 
     componentWillUpdate() {
-        if (!t) {
-            t = true;
-            this.drawChart();
-        }
     }
 
     onBreakpointChange = (breakpoint) => {
@@ -184,10 +180,11 @@ class _PatientCardComponent extends Component {
 
     render() {
         //console.log("PatientCard props", this.props);
+        let data = this.getChart();
         let datasets = [];
-        for (var i = 0; i < this.state.datasets.length; i++) {
-            if (this.state.show[this.state.datasets[i].label])
-                datasets.push(this.state.datasets[i]);
+        for (var i = 0; i < data.datasets.length; i++) {
+            if (this.state.show[data.datasets[i].label])
+                datasets.push(data.datasets[i]);
         }
         return (
             <div key={this.props.patient.id}>
@@ -201,7 +198,7 @@ class _PatientCardComponent extends Component {
                     </Grid>
                     <Chart data={{
                         datasets: datasets,
-                        labels: this.state.labels
+                        labels: data.labels
                     }}/>
                 </div>
             </div>

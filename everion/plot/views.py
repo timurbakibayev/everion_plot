@@ -76,41 +76,49 @@ def generate_hrv(prev):
 
 def generate_dummies(request):
     fails = 0
-    Reading.objects.all().delete()
+    #Reading.objects.all().delete()
     for patient in Patient.objects.all():
-        start = dateutil.parser.parse(patient.last_update)
-        end = datetime.datetime.now()
-        current = start
-        value_hr = 80
-        value_spo2 = 96 # 93 - 99
-        value_activity = 0.78 # 0.2 - 6
-        value_bperf = 0.35 #+- 0.5
-        value_rr = 18 #+- 10
-        value_hrv = 20 #12 - 42
-        while current <= end:
-            value_hr = generate_hr(value_hr)
-            value_spo2 = generate_spo2(value_spo2)
-            value_activity = generate_activity(value_activity)
-            value_bperf = generate_bperf(value_bperf)
-            value_rr = generate_rr(value_rr)
-            value_hrv = generate_hrv(value_hrv)
-            current += datetime.timedelta(minutes=5)
-            reading = Reading()
-            reading.patient = patient
-            reading.time = current
-            reading.time_iso = current.isoformat()[:19]
-            reading.time_epoch = 0
-            reading.value_hr = value_hr
-            reading.value_spo2 = value_spo2
-            reading.value_activity = value_activity
-            reading.value_bperf = value_bperf
-            reading.value_rr = value_rr
-            reading.value_hrv = value_hrv
-            try:
-                reading.save()
-            except:
-                fails += 1
-        print("Done with patient", patient.id)
+        if patient.dummy:
+            start = dateutil.parser.parse(patient.last_update)
+            end = datetime.datetime.now()
+            current = start
+            value_hr = 80
+            value_spo2 = 96 # 93 - 99
+            value_activity = 0.78 # 0.2 - 6
+            value_bperf = 0.35 #+- 0.5
+            value_rr = 18 #+- 10
+            value_hrv = 20 #12 - 42
+            cc = 0
+            while current <= end:
+                value_hr = generate_hr(value_hr)
+                value_spo2 = generate_spo2(value_spo2)
+                value_activity = generate_activity(value_activity)
+                value_bperf = generate_bperf(value_bperf)
+                value_rr = generate_rr(value_rr)
+                value_hrv = generate_hrv(value_hrv)
+                current += datetime.timedelta(minutes=5)
+                reading = Reading()
+                reading.patient = patient
+                reading.time = tz.localize(current)
+                reading.time_iso = current.isoformat()[:19]
+                reading.time_epoch = 0
+                reading.value_hr = value_hr
+                reading.value_spo2 = value_spo2
+                reading.value_activity = value_activity
+                reading.value_bperf = value_bperf
+                reading.value_rr = value_rr
+                reading.value_hrv = value_hrv
+                try:
+                    reading.save()
+                    cc += 1
+                except:
+                    fails += 1
+            if cc > 0:
+                patient.last_update = current.isoformat()[:19]
+                patient.save()
+                return render(request, 'generate_dummies.html',
+                          {"message": "Added to " + patient.name + ", number of readings: " + str(len(Reading.objects.all()))+
+                           ", fails: " + str(fails)})
     return render(request, 'generate_dummies.html',
-                  {"message": "number of readings: " + str(len(Reading.objects.all()))+
-                   ", fails: " + str(fails)})
+                  {"message": "Did not add anything, all patients have data, number of readings: " + str(len(Reading.objects.all())) +
+                              ", fails: " + str(fails)})

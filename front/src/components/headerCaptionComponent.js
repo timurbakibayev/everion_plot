@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import {connect} from 'react-redux';
+import * as actions from "../actions/readings";
 
 import * as actionType from '../actionTypes';
 
@@ -30,6 +31,10 @@ class _HeaderCaptionComponent extends Component {
             return this.props.caption
     }
 
+    refreshChart() {
+        this.props.refreshReadings(this.props.patient.id);
+    }
+
     render() {
         console.log("headerCaptionComponent props", this.props);
         return (<div style={{flexDirection: "row"}}>
@@ -43,6 +48,7 @@ class _HeaderCaptionComponent extends Component {
                                console.log(newVal);
                                this.setState({date_from: newVal});
                                localStorage.setItem("date_from", newVal);
+                               this.refreshChart();
                            }
                        }/>
             <TextField id={"time_from"} defaultValue={this.state.time_from}
@@ -55,6 +61,7 @@ class _HeaderCaptionComponent extends Component {
                                console.log(newVal);
                                this.setState({time_from: newVal});
                                localStorage.setItem("time_from", newVal);
+                               this.refreshChart();
                            }
                        }/>
             <span> - </span>
@@ -68,6 +75,7 @@ class _HeaderCaptionComponent extends Component {
                                console.log(newVal);
                                this.setState({date_to: newVal});
                                localStorage.setItem("date_to", newVal);
+                               this.refreshChart();
                            }
                        }/>
             <TextField id={"time_to"} defaultValue={this.state.time_to}
@@ -78,54 +86,12 @@ class _HeaderCaptionComponent extends Component {
                            (event) => {
                                let newVal = event.target.value;
                                console.log(newVal);
-                               this.setState({time_from: newVal});
+                               this.setState({time_to: newVal});
                                localStorage.setItem("time_to", newVal);
+                               this.refreshChart();
                            }
                        }/>
         </div>)
-        // if (this.props.path.toLowerCase().search(/patients\/(\d+)$/) > -1) {
-        //     let itemNo = parseInt(this.props.path.toLowerCase().match(/patients\/(\d+)$/)[1],10);
-        //     console.log("itemNo from regexp", itemNo, this.props);
-        //     let patientItem = this.props.patient;
-        //     if (patientItem !== null)
-        //         return (<span>{ patientItem.patient_header }</span>)
-        //     else
-        //         return (this.props.settings.language === "russian"?
-        //             <span>Загрузка...</span>:
-        //             <span>Loading...</span>)
-        //
-        // }
-        //
-        //
-        // if (this.props.path.toLowerCase().indexOf("patients") > -1)
-        //     return (
-        //         this.props.settings.language === "russian"?
-        //         <span>Пациенты: {actionType.PATIENTS_ALL}</span>:
-        //         <span>Patients: {actionType.PATIENTS_ALL_EN}</span>
-        //     );
-        // if (this.props.path.toLowerCase().indexOf("companies") > -1)
-        //     return (
-        //         this.props.settings.language === "russian"?
-        //         <span>Организации</span>:
-        //         <span>Companies</span>
-        //     );
-        // if (this.props.path.toLowerCase().indexOf("auth") > -1)
-        //     return (
-        //         this.props.settings.language === "russian"?
-        //         <span>Учетная запись</span>:
-        //         <span>Account</span>
-        //     );
-        // if (this.props.path.toLowerCase().indexOf("calendar") > -1)
-        //     return (
-        //         this.props.settings.language === "russian"?
-        //         <span>Производственный календарь</span>:
-        //         <span>Calendar</span>
-        //     );
-        // return (
-        //     this.props.settings.language === "russian"?
-        //     <span>Главная страница</span>:
-        //     <span>Main Page</span>
-        // )
     }
 }
 
@@ -135,7 +101,9 @@ const mapStateToProps = (state) => ({
     settings: state.settings,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+    refreshReadings: actions.refreshReadings,
+};
 
 const HeaderCaptionComponent = connect(
     mapStateToProps,
