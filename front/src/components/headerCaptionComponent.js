@@ -38,7 +38,7 @@ class _HeaderCaptionComponent extends Component {
     render() {
         console.log("headerCaptionComponent props", this.props);
         return (<div style={{flexDirection: "row"}}>
-            <TextField id={"date_from"} defaultValue={this.state.date_from}
+            <TextField id={"date_from"}
                        value={this.state.date_from}
                        style={{fontSize: "0.6em"}}
                        type={"date"}
@@ -51,7 +51,7 @@ class _HeaderCaptionComponent extends Component {
                                this.refreshChart();
                            }
                        }/>
-            <TextField id={"time_from"} defaultValue={this.state.time_from}
+            <TextField id={"time_from"}
                        value={this.state.time_from}
                        style={{fontSize: "0.6em"}}
                        type={"time"}
@@ -65,7 +65,7 @@ class _HeaderCaptionComponent extends Component {
                            }
                        }/>
             <span> - </span>
-            <TextField id={"date_to"} defaultValue={this.state.date_to}
+            <TextField id={"date_to"}
                        value={this.state.date_to}
                        style={{fontSize: "0.6em"}}
                        type={"date"}
@@ -78,7 +78,7 @@ class _HeaderCaptionComponent extends Component {
                                this.refreshChart();
                            }
                        }/>
-            <TextField id={"time_to"} defaultValue={this.state.time_to}
+            <TextField id={"time_to"}
                        value={this.state.time_to}
                        style={{fontSize: "0.6em"}}
                        type={"time"}

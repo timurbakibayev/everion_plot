@@ -24,6 +24,7 @@ import Collapse from 'material-ui/transitions/Collapse';
 import Table, {TableBody, TableCell, TableHead, TableRow} from 'material-ui/Table';
 
 import * as actions from "../../actions/readings";
+import * as actionsPatients from "../../actions/patients";
 
 const styles = {
     root: {
@@ -201,6 +202,22 @@ class _PatientCardComponent extends Component {
                         labels: data.labels
                     }}/>
                 </div>
+                <div style={{width: "100%"}}>
+                    Нормы для пациента {this.props.patient.name}
+                    <Grid container spacing={24}>
+                        <Grid item sm={12} md={6}>Пульс</Grid>
+                        <Grid item sm={12} md={6}>
+                            <TextField  style={{width: "5em"}}
+                                        type="number"
+                                value={""+this.props.patient.limits_hr_min}
+                                onChange={(event) => {console.log("Changed to value " +
+                                    (parseFloat(event.target.value)+1))}}/> -
+                            <TextField style={{width: "5em"}}
+                                       type="number"
+                                value={""+this.props.patient.limits_hr_max}/>
+                        </Grid>
+                    </Grid>
+                </div>
             </div>
         );
     }
@@ -213,6 +230,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
     refreshReadings: actions.refreshReadings,
+    putPatient: actionsPatients.putCurrentPatient,
 };
 
 const PatientCardComponent = connect(

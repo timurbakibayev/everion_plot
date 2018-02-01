@@ -28,3 +28,18 @@ export const loadCurrentPatient = (id, token) => {
         }
     )
 };
+
+export const putCurrentPatient = (id, body ,token) => {
+    return fetch(
+        `${URL}api/patients/${id}/`,
+        {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${ token }`
+            },
+            body: JSON.stringify(body),
+        }
+    )
+};

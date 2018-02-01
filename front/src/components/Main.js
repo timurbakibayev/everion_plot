@@ -214,9 +214,6 @@ class _MainComponent extends Component {
                                 type="persistent"
                                 anchor="left"
                                 open={this.state.open}
-                                onRequestClose={() => {
-                                    this.setState({open: false})
-                                }}
                                 onClick={() => {
                                 }}>
                                 <div style={{zoom: 0.7}} className={classes.drawerInner}>
