@@ -37,7 +37,7 @@ class _HeaderCaptionComponent extends Component {
 
     render() {
         console.log("headerCaptionComponent props", this.props);
-        return (<div style={{flexDirection: "row"}}>
+        return (<div style={{flexDirection: "row", textAlign: "right"}}>
             <TextField id={"date_from"}
                        value={this.state.date_from}
                        style={{fontSize: "0.6em"}}

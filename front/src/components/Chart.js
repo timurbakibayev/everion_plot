@@ -9,6 +9,17 @@ export default class Chart extends Component {
                 width={100}
                 height={50}
                 options={{
+                    elements: {
+                        point: {
+                            pointStyle: 'rectRot',
+                        }
+                    },
+                    tooltips: {
+						mode: "index",
+						intersect: false,
+                        displayColors: true,
+
+					},
                     scales: {
                         yAxes: [{
                             ticks: {
@@ -17,6 +28,10 @@ export default class Chart extends Component {
                             id: 'A',
                             type: 'linear',
                             position: 'left',
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Date'
+                            },
                         }, {
                             id: 'D',
                             ticks: {

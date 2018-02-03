@@ -158,77 +158,77 @@ class _PatientCardComponent extends Component {
                     label: "Пульс",
                     yAxisID: "A",
                     data: data_hr,
-                    backgroundColor: [
-                        'rgba(180,35,132, 0.2)',
-                    ],
+                    backgroundColor:
+                        'rgba(180,35,132, 0.5)',
                     borderColor: [
                         'rgba(180,35,132, 0.7)',
 
                     ],
                     pointRadius: point_radius_hr,
+                    fill:false,
                 },
                 {
                     yAxisID: "D",
                     label: "Кислород",
                     data: data_spo2,
-                    backgroundColor: [
-                        'rgba(35,35,132, 0.2)',
-                    ],
+                    backgroundColor:
+                        'rgba(35,35,132, 0.5)',
                     borderColor: [
                         'rgba(35,35,132, 0.8)',
 
                     ],
                     pointRadius: point_radius_spo2,
+                    fill:false,
                 },
                 {
                     yAxisID: "B",
                     label: "Активность",
                     data: data_activity,
-                    backgroundColor: [
-                        'rgba(35,132,52, 0.2)',
-                    ],
+                    backgroundColor:
+                        'rgba(35,132,52, 0.5)',
                     borderColor: [
                         'rgba(35,132,52, 0.8)',
 
                     ],
+                    fill:false,
                 },
                 {
                     yAxisID: "C",
                     label: "Перфузия",
                     data: data_bperf,
-                    backgroundColor: [
-                        'rgba(85,132,52, 0.2)',
-                    ],
+                    backgroundColor:
+                        'rgba(85,132,52, 0.5)',
                     borderColor: [
                         'rgba(85,132,52, 0.8)',
 
                     ],
                     pointRadius: point_radius_bperf,
+                    fill:false,
                 },
                 {
                     yAxisID: "B",
                     label: "Дыхание",
                     data: data_rr,
-                    backgroundColor: [
-                        'rgba(85,132,252, 0.2)',
-                    ],
+                    backgroundColor:
+                        'rgba(85,132,252, 0.5)',
                     borderColor: [
                         'rgba(85,132,252, 0.8)',
 
                     ],
                     pointRadius: point_radius_rr,
+                    fill:false,
                 },
                 {
                     yAxisID: "A",
                     label: "Равномерность",
                     data: data_hrv,
-                    backgroundColor: [
-                        'rgba(185,132,252, 0.2)',
-                    ],
+                    backgroundColor:
+                        'rgba(185,132,252, 0.5)',
                     borderColor: [
                         'rgba(185,132,252, 0.8)',
 
                     ],
+                    fill:false,
                 },
             ]
         })
@@ -270,7 +270,7 @@ class _PatientCardComponent extends Component {
         }
         return (
             <div key={this.props.patient.id} onDragOver={this.preventDefault} onDrop={this.drop}>
-                <div style={styles.root}>
+                <div style={{...styles.root, fontSize: 30}}>
                     {this.props.patient.name}
                     <Grid container spacing={24}>
                         <Grid item sm={12} md={6}>
@@ -280,7 +280,7 @@ class _PatientCardComponent extends Component {
                     </Grid>
                     <Chart data={{
                         datasets: datasets,
-                        labels: data.labels
+                        labels: data.labels,
                     }}/>
                 </div>
                 <div style={{width: "100%"}}>
