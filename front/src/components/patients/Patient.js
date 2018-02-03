@@ -27,6 +27,9 @@ class PatientComponent extends Component {
             if (parseInt(data_hr_str[i]) !== 0) {
                 data_hr.push({x: i, y: parseInt(data_hr_str[i])});
                 labels.push(i);
+            } else {
+                data_hr.push({x: i, y: NaN});
+                labels.push(i);
             }
         }
         let hr = {label:"Пульс",data:data_hr, pointRadius: 0, borderColor: [

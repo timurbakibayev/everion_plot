@@ -29,30 +29,28 @@ def reading_list(request,id):
             "date_to" not in request.GET or \
             "time_from" not in request.GET or \
             "time_to" not in request.GET:
-            readings = Reading.objects.filter(patient_id=id).order_by('-time_iso')[:200]
-            for reading in readings:
-                for_output.append(reading)
+            readings = Reading.objects.filter(patient_id=id).order_by('time_iso')
         else:
             filter_from = request.GET["date_from"] + "T" + request.GET["time_from"]
             filter_to = request.GET["date_to"] + "T" + request.GET["time_to"]
             readings = Reading.objects.filter(patient_id=id). \
                 filter(time_iso__gte=filter_from). \
-                filter(time_iso__lte=filter_to).order_by('-time_iso')
-            skip = len(readings) // 100
-            i = 0
-            sum_steps = 0
-            sum_activity = 0
-            for reading in readings:
-                i += 1
-                if skip == 0 or i % skip == 0:
-                    reading.value_steps += sum_steps
-                    reading.value_activity += sum_activity
-                    for_output.append(reading)
-                    sum_steps = 0
-                    sum_activity = 0
-                else:
-                    sum_steps += reading.value_steps
-                    sum_activity += reading.value_activity
+                filter(time_iso__lte=filter_to).order_by('time_iso')
+        skip = len(readings) // 100
+        i = 0
+        sum_steps = 0
+        sum_activity = 0
+        for reading in readings:
+            i += 1
+            if skip == 0 or i % skip == 0:
+                reading.value_steps += sum_steps
+                reading.value_activity += sum_activity
+                for_output.append(reading)
+                sum_steps = 0
+                sum_activity = 0
+            else:
+                sum_steps += reading.value_steps
+                sum_activity += reading.value_activity
 
         serializer = ReadingSerializer(for_output, many=True, context={"request": request})
         return Response(serializer.data)

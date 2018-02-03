@@ -11,12 +11,16 @@ class PatientSerializer(serializers.ModelSerializer):
     thumbnail = serializers.SerializerMethodField("in_thumbnail")
 
     def in_thumbnail(self, patient):
-        readings = Reading.objects.filter(patient_id=patient.id).order_by('-time_iso')[:100]
+        readings = Reading.objects.filter(patient_id=patient.id).order_by('-time_iso')
+        skip = len(readings) // 50
+        i = 0
         t = ""
         for reading in readings:
-            if len(t) > 0:
-                t += ","
-            t += str(reading.value_hr)
+            i += 1
+            if skip == 0 or i % skip == 0:
+                if len(t) > 0:
+                    t += ","
+                t += str(reading.value_hr)
         return t
 
     class Meta:
