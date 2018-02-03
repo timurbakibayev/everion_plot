@@ -29,11 +29,11 @@ class PatientComponent extends Component {
                 labels.push(i);
             }
         }
-        let hr = {label:"Пульс",data:data_hr, borderColor: [
-                        'rgba(180,35,35, 0.5)',
+        let hr = {label:"Пульс",data:data_hr, pointRadius: 0, borderColor: [
+                        'rgba(180,35,35, 0.7)',
                     ],backgroundColor: [
                         'rgba(180,35,35, 0.1)',
-                    ],};
+                    ],fill:false};
         return (
             <Card className="CompanyCard" style={{fontWeight: this.props.emph ? "bolder" : "normal"}}>
                 <div className="details" style={{display: "flex", flexDirection: "row", flex: 1}}>
@@ -55,7 +55,7 @@ class PatientComponent extends Component {
                                 }}> Технология {this.props.technology}</span> : ""
                             }</div>
                     </div>
-                    <div style={{flex: 0.7, backgroundColor: "#F5FFF5"}}>
+                    <div style={{flex: 0.7, backgroundColor: "F4F4F5"}}>
                         <Chart data = {{
                             datasets: [hr],
                             labels: labels,

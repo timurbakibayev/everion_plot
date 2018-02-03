@@ -18,7 +18,6 @@ export default class Chart extends Component {
 						mode: "index",
 						intersect: false,
                         displayColors: true,
-
 					},
                     scales: {
                         yAxes: [{
@@ -41,7 +40,7 @@ export default class Chart extends Component {
                             position: 'right',
                             ticks: {
                                 beginAtZero: true,
-                                max: 20,
+                                max: 30,
                                 min: 0
                             }
                         }, {

@@ -93,7 +93,7 @@ class _PatientCardComponent extends Component {
                     data[i].value_hr > this.props.patient.limits_hr_max;
                 point_radius_hr.push(critical ? 10 : 1)
             } else {
-                data_hr.push({x: i, y: last_hr});
+                data_hr.push({x: i, y: NaN});
                 point_radius_hr.push(0);
             }
 
@@ -105,7 +105,7 @@ class _PatientCardComponent extends Component {
                     data[i].value_rr > this.props.patient.limits_rr_max;
                 point_radius_rr.push(critical ? 10 : 1)
             } else {
-                data_rr.push({x: i, y: last_rr});
+                data_rr.push({x: i, y: NaN});
                 point_radius_rr.push(0);
             }
 
@@ -117,7 +117,7 @@ class _PatientCardComponent extends Component {
                     data[i].value_bperf > this.props.patient.limits_bperf_max;
                 point_radius_bperf.push(critical ? 10 : 1);
             } else {
-                data_bperf.push({x: i, y: last_bperf});
+                data_bperf.push({x: i, y: NaN});
                 point_radius_bperf.push(0);
             }
 
@@ -129,7 +129,7 @@ class _PatientCardComponent extends Component {
                     data[i].value_spo2 > this.props.patient.limits_spo2_max;
                 point_radius_spo2.push(critical ? 10 : 1);
             } else {
-                data_spo2.push({x: i, y: last_spo2});
+                data_spo2.push({x: i, y: NaN});
                 point_radius_spo2.push(0);
             }
 
@@ -137,14 +137,14 @@ class _PatientCardComponent extends Component {
                 data_activity.push({x: i, y: data[i].value_activity});
                 last_activity = data[i].value_activity;
             } else {
-                data_activity.push({x: i, y: last_activity});
+                data_activity.push({x: i, y: NaN});
             }
 
             if (data[i].value_hrv !== 0) {
                 data_hrv.push({x: i, y: data[i].value_hrv});
                 last_hrv = data[i].value_hrv;
             } else {
-                data_hrv.push({x: i, y: last_hrv});
+                data_hrv.push({x: i, y: NaN});
             }
 
 

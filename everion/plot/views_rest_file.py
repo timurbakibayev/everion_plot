@@ -44,7 +44,9 @@ class FileUploadView(views.APIView):
         print("Loading", instance.attachment.url)
         readings = Reading.objects.filter(patient=patient)
         with open(instance.attachment.url) as csvfile:
+            print("File is open now")
             spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+            print("spamreader is ready")
             i = 0
             for row in spamreader:
                 #print("line",i)
