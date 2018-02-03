@@ -38,7 +38,7 @@ def reading_list(request,id):
             readings = Reading.objects.filter(patient_id=id). \
                 filter(time_iso__gte=filter_from). \
                 filter(time_iso__lte=filter_to).order_by('-time_iso')
-            skip = len(readings) // 400
+            skip = len(readings) // 50
             i = 0
             for reading in readings:
                 i += 1

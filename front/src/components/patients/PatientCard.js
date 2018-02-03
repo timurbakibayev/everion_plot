@@ -67,6 +67,10 @@ class _PatientCardComponent extends Component {
     getChart() {
         let newLabels = [];
         let data_hr = [];
+        let point_radius_hr = [];
+        let point_radius_rr = [];
+        let point_radius_spo2 = [];
+        let point_radius_bperf = [];
         let data_spo2 = [];
         let data_activity = [];
         let data_bperf = [];
@@ -85,38 +89,63 @@ class _PatientCardComponent extends Component {
             if (data[i].value_hr !== 0) {
                 data_hr.push({x: i, y: data[i].value_hr});
                 last_hr = data[i].value_hr;
-            } else
+                const critical = data[i].value_hr < this.props.patient.limits_hr_min ||
+                    data[i].value_hr > this.props.patient.limits_hr_max;
+                point_radius_hr.push(critical ? 10 : 1)
+            } else {
                 data_hr.push({x: i, y: last_hr});
+                point_radius_hr.push(0);
+            }
 
             if (data[i].value_rr !== 0) {
                 data_rr.push({x: i, y: data[i].value_rr});
                 last_rr = data[i].value_rr;
-            } else
+                const critical =
+                    data[i].value_rr < this.props.patient.limits_rr_min ||
+                    data[i].value_rr > this.props.patient.limits_rr_max;
+                point_radius_rr.push(critical ? 10 : 1)
+            } else {
                 data_rr.push({x: i, y: last_rr});
+                point_radius_rr.push(0);
+            }
 
             if (data[i].value_bperf !== 0) {
                 data_bperf.push({x: i, y: data[i].value_bperf});
                 last_bperf = data[i].value_bperf;
-            } else
+                const critical =
+                    data[i].value_bperf < this.props.patient.limits_bperf_min ||
+                    data[i].value_bperf > this.props.patient.limits_bperf_max;
+                point_radius_bperf.push(critical ? 10 : 1);
+            } else {
                 data_bperf.push({x: i, y: last_bperf});
+                point_radius_bperf.push(0);
+            }
 
             if (data[i].value_spo2 !== 0) {
                 data_spo2.push({x: i, y: data[i].value_spo2});
                 last_spo2 = data[i].value_spo2;
-            } else
+                const critical =
+                    data[i].value_spo2 < this.props.patient.limits_spo2_min ||
+                    data[i].value_spo2 > this.props.patient.limits_spo2_max;
+                point_radius_spo2.push(critical ? 10 : 1);
+            } else {
                 data_spo2.push({x: i, y: last_spo2});
+                point_radius_spo2.push(0);
+            }
 
             if (data[i].value_activity !== 0) {
                 data_activity.push({x: i, y: data[i].value_activity});
                 last_activity = data[i].value_activity;
-            } else
+            } else {
                 data_activity.push({x: i, y: last_activity});
+            }
 
             if (data[i].value_hrv !== 0) {
                 data_hrv.push({x: i, y: data[i].value_hrv});
                 last_hrv = data[i].value_hrv;
-            } else
+            } else {
                 data_hrv.push({x: i, y: last_hrv});
+            }
 
 
             newLabels.push(data[i].time_iso.replace("T", ", "));
@@ -136,6 +165,7 @@ class _PatientCardComponent extends Component {
                         'rgba(180,35,132, 0.7)',
 
                     ],
+                    pointRadius: point_radius_hr,
                 },
                 {
                     yAxisID: "D",
@@ -145,9 +175,10 @@ class _PatientCardComponent extends Component {
                         'rgba(35,35,132, 0.2)',
                     ],
                     borderColor: [
-                        'rgba(35,35,132, 0.4)',
+                        'rgba(35,35,132, 0.8)',
 
                     ],
+                    pointRadius: point_radius_spo2,
                 },
                 {
                     yAxisID: "B",
@@ -157,7 +188,7 @@ class _PatientCardComponent extends Component {
                         'rgba(35,132,52, 0.2)',
                     ],
                     borderColor: [
-                        'rgba(35,132,52, 0.4)',
+                        'rgba(35,132,52, 0.8)',
 
                     ],
                 },
@@ -169,9 +200,10 @@ class _PatientCardComponent extends Component {
                         'rgba(85,132,52, 0.2)',
                     ],
                     borderColor: [
-                        'rgba(85,132,52, 0.4)',
+                        'rgba(85,132,52, 0.8)',
 
                     ],
+                    pointRadius: point_radius_bperf,
                 },
                 {
                     yAxisID: "B",
@@ -181,9 +213,10 @@ class _PatientCardComponent extends Component {
                         'rgba(85,132,252, 0.2)',
                     ],
                     borderColor: [
-                        'rgba(85,132,252, 0.4)',
+                        'rgba(85,132,252, 0.8)',
 
                     ],
+                    pointRadius: point_radius_rr,
                 },
                 {
                     yAxisID: "A",
@@ -193,7 +226,7 @@ class _PatientCardComponent extends Component {
                         'rgba(185,132,252, 0.2)',
                     ],
                     borderColor: [
-                        'rgba(185,132,252, 0.4)',
+                        'rgba(185,132,252, 0.8)',
 
                     ],
                 },
@@ -237,7 +270,7 @@ class _PatientCardComponent extends Component {
         }
         return (
             <div key={this.props.patient.id} onDragOver={this.preventDefault} onDrop={this.drop}>
-                <div style={styles.root} >
+                <div style={styles.root}>
                     {this.props.patient.name}
                     <Grid container spacing={24}>
                         <Grid item sm={12} md={6}>
@@ -248,7 +281,7 @@ class _PatientCardComponent extends Component {
                     <Chart data={{
                         datasets: datasets,
                         labels: data.labels
-                    }} />
+                    }}/>
                 </div>
                 <div style={{width: "100%"}}>
                     Нормы для пациента {this.props.patient.name}
