@@ -321,7 +321,7 @@ class _MainComponent extends Component {
 
 
 const mapStateToProps = (state) => ({
-    patient: state.patients.currentPatient,
+    //patient: state.patients.currentPatient,
     patients: state.patients.list,
     settings: state.settings,
 });
