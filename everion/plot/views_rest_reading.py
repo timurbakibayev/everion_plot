@@ -24,7 +24,7 @@ def reading_list(request,id):
 
     if request.method == 'GET':
         for_output = []
-        print("Request",request.GET["date_from"])
+        #print("Request",request.GET["date_from"])
         if "date_from" not in request.GET or \
             "date_to" not in request.GET or \
             "time_from" not in request.GET or \
