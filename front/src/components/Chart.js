@@ -28,10 +28,6 @@ export default class Chart extends Component {
                             id: 'A',
                             type: 'linear',
                             position: 'left',
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Date'
-                            },
                         }, {
                             id: 'D',
                             ticks: {
