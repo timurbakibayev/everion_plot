@@ -163,6 +163,7 @@ class _MainComponent extends Component {
             hr: localStorage.getItem("hr") === "1",
             rr: localStorage.getItem("rr") === "1",
             spo2: localStorage.getItem("spo2") === "1",
+            steps: localStorage.getItem("steps") === "1",
             activity: localStorage.getItem("activity") === "1",
             bperf: localStorage.getItem("bperf") === "1",
             hrv: localStorage.getItem("hrv") === "1",
@@ -275,6 +276,13 @@ class _MainComponent extends Component {
                                             this.setState({hrv: !this.state.hrv});
                                         }}>
                                             <Checkbox label="hrv" checked={this.state.hrv}/>Равномерность
+                                        </ListItem>
+
+                                        <ListItem button onClick={() => {
+                                            localStorage.setItem("steps", this.state.steps ? "0" : "1");
+                                            this.setState({steps: !this.state.steps});
+                                        }}>
+                                            <Checkbox label="steps" checked={this.state.steps}/>Шаги
                                         </ListItem>
 
                                     </List>

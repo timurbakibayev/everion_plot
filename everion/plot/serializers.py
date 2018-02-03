@@ -31,13 +31,14 @@ class PatientSerializer(serializers.ModelSerializer):
 
 class ReadingSerializer(serializers.ModelSerializer):
     # caption = serializers.SerializerMethodField("in_caption")
-
-    # def in_caption(self, field):
-    #    return str(field.field_name)
+    # sum_steps = serializers.SerializerMethodField("in_steps")
+    #
+    # def in_steps(self, reading):
+    #    return str(reading.field_name)
 
     class Meta:
         model = Reading
         fields = ('time_epoch', 'time', 'time_iso',
-                  'value_hr', 'value_spo2', 'value_activity',
+                  'value_hr', 'value_spo2', 'value_activity', 'value_steps',
                   'value_bperf', 'value_rr', 'value_hrv',
                   )

@@ -59,6 +59,7 @@ class _PatientCardComponent extends Component {
                 "Активность": localStorage.getItem("activity") === "1",
                 "Перфузия": localStorage.getItem("bperf") === "1",
                 "Равномерность": localStorage.getItem("hrv") === "1",
+                "Шаги": localStorage.getItem("steps") === "1",
             },
             body: {},
         }
@@ -76,6 +77,7 @@ class _PatientCardComponent extends Component {
         let data_bperf = [];
         let data_rr = [];
         let data_hrv = [];
+        let data_steps = [];
         let last_hr = 0
         let last_rr = 0
         let last_spo2 = 0
@@ -147,6 +149,7 @@ class _PatientCardComponent extends Component {
                 data_hrv.push({x: i, y: NaN});
             }
 
+            data_steps.push({x: i, y: data[i].value_steps});
 
             newLabels.push(data[i].time_iso.replace("T", ", "));
         }
@@ -181,7 +184,7 @@ class _PatientCardComponent extends Component {
                     fill:false,
                 },
                 {
-                    yAxisID: "B",
+                    //yAxisID: "B",
                     label: "Активность",
                     data: data_activity,
                     backgroundColor:
@@ -197,9 +200,9 @@ class _PatientCardComponent extends Component {
                     label: "Перфузия",
                     data: data_bperf,
                     backgroundColor:
-                        'rgba(85,132,52, 0.5)',
+                        'rgba(135,102,92, 0.5)',
                     borderColor: [
-                        'rgba(85,132,52, 0.8)',
+                        'rgba(125,102,92, 0.8)',
 
                     ],
                     pointRadius: point_radius_bperf,
@@ -226,6 +229,18 @@ class _PatientCardComponent extends Component {
                         'rgba(185,132,252, 0.5)',
                     borderColor: [
                         'rgba(185,132,252, 0.8)',
+
+                    ],
+                    fill:false,
+                },
+                {
+                    //yAxisID: "B",
+                    label: "Шаги",
+                    data: data_steps,
+                    backgroundColor:
+                        'rgba(244,107,62, 0.5)',
+                    borderColor: [
+                        'rgba(244,107,62, 0.8)',
 
                     ],
                     fill:false,

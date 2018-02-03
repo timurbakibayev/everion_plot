@@ -33,12 +33,12 @@ class _FileUploadComponent extends Component {
             <div>
                 <form onSubmit={ this.uploadFile.bind(this) } className="formUpload">
                     <TextField type="file" name="file" onChange={(e) => {
-                        this.setState({changed: true})
+                        this.setState({changed: true, success: false})
                     }}/>
                     <Saving
                         type="submit"
                         handleButtonClick={() => {}}
-                        success={this.state.success}
+                        success={this.state.success && !this.props.isUploading}
                         loading={this.props.isUploading}
                         changed={this.state.changed}
                     />

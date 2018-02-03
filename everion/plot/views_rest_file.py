@@ -56,7 +56,7 @@ class FileUploadView(views.APIView):
                         device, counter, timestamp, timezone, value, quality = row
                         value = float(value)
                         quality = float(quality)
-                        if quality > -1:
+                        if quality > -1 or "_activity_" in filename or 2+2 == 4:
                             timestamp = int(timestamp)+6*60*60
                             timestamp_iso = time.strftime('%Y-%m-%dT%H:%M:%S', time.localtime(timestamp))
                             time_dt = tz.localize(dateutil.parser.parse(timestamp_iso))
@@ -65,12 +65,6 @@ class FileUploadView(views.APIView):
                                     reading = readings.get(time_iso=timestamp_iso)
                                 except:
                                     reading = Reading()
-                                    reading.value_hr = 0
-                                    reading.value_rr = 0
-                                    reading.value_hrv = 0
-                                    reading.value_activity = 0
-                                    reading.value_bperf = 0
-                                    reading.value_spo2 = 0
                                 reading.patient_id = patient.id
                                 reading.time_iso = timestamp_iso
                                 reading.time_epoch = timestamp
@@ -87,6 +81,8 @@ class FileUploadView(views.APIView):
                                     reading.value_bperf = value
                                 if "_activity_" in filename:
                                     reading.value_activity = value
+                                if "_steps_" in filename:
+                                    reading.value_steps = int(value)
                                 try:
                                     reading.save()
                                 except Exception as e:

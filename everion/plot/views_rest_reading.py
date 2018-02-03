@@ -38,12 +38,21 @@ def reading_list(request,id):
             readings = Reading.objects.filter(patient_id=id). \
                 filter(time_iso__gte=filter_from). \
                 filter(time_iso__lte=filter_to).order_by('-time_iso')
-            skip = len(readings) // 50
+            skip = len(readings) // 100
             i = 0
+            sum_steps = 0
+            sum_activity = 0
             for reading in readings:
                 i += 1
                 if skip == 0 or i % skip == 0:
+                    reading.value_steps += sum_steps
+                    reading.value_activity += sum_activity
                     for_output.append(reading)
+                    sum_steps = 0
+                    sum_activity = 0
+                else:
+                    sum_steps += reading.value_steps
+                    sum_activity += reading.value_activity
 
         serializer = ReadingSerializer(for_output, many=True, context={"request": request})
         return Response(serializer.data)
