@@ -58,9 +58,6 @@ export default class Chart extends Component {
                             type: 'linear',
                             position: 'left',
                             ticks: {
-                                beginAtZero: true,
-                                max: 1000,
-                                min: 0
                             }
                         }]
                     },
