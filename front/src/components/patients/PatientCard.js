@@ -184,7 +184,7 @@ class _PatientCardComponent extends Component {
                     fill:false,
                 },
                 {
-                    //yAxisID: "B",
+                    yAxisID: "E",
                     label: "Активность",
                     data: data_activity,
                     backgroundColor:

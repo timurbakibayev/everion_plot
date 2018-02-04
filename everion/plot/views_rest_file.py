@@ -48,6 +48,7 @@ class FileUploadView(views.APIView):
             spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
             print("spamreader is ready")
             i = 0
+            cumulative = 0
             for row in spamreader:
                 #print("line",i)
                 i += 1
@@ -80,14 +81,17 @@ class FileUploadView(views.APIView):
                                 if "_bperf_" in filename:
                                     reading.value_bperf = value
                                 if "_activity_" in filename:
-                                    reading.value_activity = value
+                                    reading.value_activity = value + cumulative
                                 if "_steps_" in filename:
-                                    reading.value_steps = int(value)
+                                    reading.value_steps = int(value + cumulative)
+                                cumulative = 0
                                 try:
                                     reading.save()
                                 except Exception as e:
                                     print("failed to save")
                                     print(e)
+                            else:
+                                cumulative += value
                     except Exception as e:
                         print("general fail to")
                         print(e)

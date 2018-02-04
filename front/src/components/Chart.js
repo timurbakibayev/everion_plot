@@ -52,6 +52,16 @@ export default class Chart extends Component {
                                 max: 1,
                                 min: 0
                             }
+                        },
+                         {
+                            id: 'E',
+                            type: 'linear',
+                            position: 'left',
+                            ticks: {
+                                beginAtZero: true,
+                                max: 1000,
+                                min: 0
+                            }
                         }]
                     },
                     maintainAspectRatio: true,

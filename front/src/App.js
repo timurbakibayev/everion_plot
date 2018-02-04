@@ -18,7 +18,7 @@ class App extends Component {
                     <img src={logo} className="App-logo" alt="logo"/>
                     <h1 className="App-title"><img src={logo_cloudoc} style={{height: "1.5em"}}/>
                         <img src={logo_cloudoc_name} style={{height: "1.5em"}}/></h1>
-                    
+
                 </header>
                 <HashRouter>
                     <Switch>
