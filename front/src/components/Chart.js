@@ -59,8 +59,6 @@ export default class Chart extends Component {
                             position: 'left',
                             ticks: {
                                 beginAtZero: true,
-                                max: 1000,
-                                min: 0
                             }
                         }]
                     },
