@@ -74,6 +74,47 @@ def generate_hrv(prev):
         return 42
     return prev + delta
 
+def web_put(request,id,date,time):
+    print(id,date,time)
+    if len(time) == 5:
+        time += ":00"
+    try:
+        patient = Patient.objects.get(pk=id)
+        user = request.user
+        # if user is None:
+        #    return Response({"detail": "Необходима авторизация"})
+    except:
+        return render(request, 'generate_dummies.html',
+                  {"message":'no such patient'})
+    readings = Reading.objects.filter(patient=patient)
+    try:
+        reading = readings.get(time_iso=date+"T"+time)
+    except:
+        reading = Reading()
+    what_i_did = ""
+    if "ratio" in request.GET:
+        what_i_did += "......... Trying to set ratio to " + request.GET["ratio"]
+        reading.value_ratio = float(request.GET["ratio"])
+        reading.save()
+    if "fvc" in request.GET:
+        what_i_did += "......... Trying to set fvc to " + request.GET["fvc"]
+        reading.value_fvc = float(request.GET["fvc"])
+        reading.save()
+    if "fev1" in request.GET:
+        what_i_did += "......... Trying to set fev1 to " + request.GET["fvc"]
+        reading.value_fev1 = float(request.GET["fev1"])
+        reading.save()
+    if "fvc_predicted" in request.GET:
+        what_i_did += "......... Trying to set fvc_predicted to " + request.GET["fvc_predicted"]
+        reading.value_fvc_predicted = float(request.GET["fvc_predicted"])
+        reading.save()
+    if "fev1_predicted" in request.GET:
+        what_i_did += "......... Trying to set fev1_predicted to " + request.GET["fev1_predicted"]
+        reading.value_fev1_predicted = float(request.GET["fev1_predicted"])
+        reading.save()
+    return render(request, 'generate_dummies.html',
+                  {"message": "id: " + id + " datetime: " + date+"T"+time + what_i_did})
+
 def generate_dummies(request):
     fails = 0
     #Reading.objects.all().delete()

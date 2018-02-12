@@ -60,6 +60,7 @@ class _PatientCardComponent extends Component {
                 "Перфузия": localStorage.getItem("bperf") === "1",
                 "Равномерность": localStorage.getItem("hrv") === "1",
                 "Шаги": localStorage.getItem("steps") === "1",
+                "FEV1": 1,
             },
             body: {},
         }
@@ -67,30 +68,38 @@ class _PatientCardComponent extends Component {
 
     getChart() {
         let newLabels = [];
-        let data_hr = [];
+        let colors_fev1_predicted = [];
         let point_radius_hr = [];
         let point_radius_rr = [];
         let point_radius_spo2 = [];
         let point_radius_bperf = [];
+        let data_fev1_predicted = [];
+        let data_hr = [];
         let data_spo2 = [];
         let data_activity = [];
         let data_bperf = [];
         let data_rr = [];
         let data_hrv = [];
         let data_steps = [];
-        let last_hr = 0
-        let last_rr = 0
-        let last_spo2 = 0
-        let last_activity = 0
-        let last_bperf = 0
-        let last_hrv = 0
 
         const data = this.props.readings;
         for (let i = 0; i < data.length; i++) {
 
+            if (data[i].value_fev1_predicted !== 0) {
+                data_fev1_predicted.push({x: i, y: data[i].value_fev1_predicted});
+                var color = "green";
+                if (data[i].value_fev1_predicted < 80)
+                    color = "orange";
+                if (data[i].value_fev1_predicted < 50)
+                    color = "red";
+                colors_fev1_predicted.push(color)
+            } else {
+                //data_fev1_predicted.push({x: i, y: NaN});
+                //colors_fev1_predicted.push("green")
+            }
+
             if (data[i].value_hr !== 0) {
                 data_hr.push({x: i, y: data[i].value_hr});
-                last_hr = data[i].value_hr;
                 const critical = data[i].value_hr < this.props.patient.limits_hr_min ||
                     data[i].value_hr > this.props.patient.limits_hr_max;
                 point_radius_hr.push(critical ? 10 : 1)
@@ -101,7 +110,6 @@ class _PatientCardComponent extends Component {
 
             if (data[i].value_rr !== 0) {
                 data_rr.push({x: i, y: data[i].value_rr});
-                last_rr = data[i].value_rr;
                 const critical =
                     data[i].value_rr < this.props.patient.limits_rr_min ||
                     data[i].value_rr > this.props.patient.limits_rr_max;
@@ -113,7 +121,6 @@ class _PatientCardComponent extends Component {
 
             if (data[i].value_bperf !== 0) {
                 data_bperf.push({x: i, y: data[i].value_bperf});
-                last_bperf = data[i].value_bperf;
                 const critical =
                     data[i].value_bperf < this.props.patient.limits_bperf_min ||
                     data[i].value_bperf > this.props.patient.limits_bperf_max;
@@ -125,7 +132,6 @@ class _PatientCardComponent extends Component {
 
             if (data[i].value_spo2 !== 0) {
                 data_spo2.push({x: i, y: data[i].value_spo2});
-                last_spo2 = data[i].value_spo2;
                 const critical =
                     data[i].value_spo2 < this.props.patient.limits_spo2_min ||
                     data[i].value_spo2 > this.props.patient.limits_spo2_max;
@@ -137,14 +143,12 @@ class _PatientCardComponent extends Component {
 
             if (data[i].value_activity !== 0) {
                 data_activity.push({x: i, y: data[i].value_activity});
-                last_activity = data[i].value_activity;
             } else {
                 data_activity.push({x: i, y: NaN});
             }
 
             if (data[i].value_hrv !== 0) {
                 data_hrv.push({x: i, y: data[i].value_hrv});
-                last_hrv = data[i].value_hrv;
             } else {
                 data_hrv.push({x: i, y: NaN});
             }
@@ -243,6 +247,18 @@ class _PatientCardComponent extends Component {
                         'rgba(244,107,62, 0.8)',
 
                     ],
+                    fill:false,
+                },
+                {
+                    yAxisID: "F",
+                    label: "FEV1",
+                    data: data_fev1_predicted,
+                    backgroundColor:
+                        'rgba(244,107,62, 0.5)',
+                    borderColor: [
+                        'rgba(244,107,62, 0.8)',
+                    ],
+                    pointRadius: 10,
                     fill:false,
                 },
             ]

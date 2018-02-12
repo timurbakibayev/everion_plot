@@ -45,4 +45,8 @@ class ReadingSerializer(serializers.ModelSerializer):
         fields = ('time_epoch', 'time', 'time_iso',
                   'value_hr', 'value_spo2', 'value_activity', 'value_steps',
                   'value_bperf', 'value_rr', 'value_hrv',
+                  'value_fvc', 'value_fvc_predicted',
+                  'value_fev1', 'value_fev1_predicted',
+                  'value_ratio', 'value_ratio_predicted',
+                  'value_pef', 'value_duration'
                   )

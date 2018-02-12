@@ -15,10 +15,10 @@ export default class Chart extends Component {
                         }
                     },
                     tooltips: {
-						mode: "index",
-						intersect: false,
+                        mode: "index",
+                        intersect: false,
                         displayColors: true,
-					},
+                    },
                     scales: {
                         yAxes: [{
                             ticks: {
@@ -53,14 +53,23 @@ export default class Chart extends Component {
                                 min: 0
                             }
                         },
-                         {
-                            id: 'E',
-                            type: 'linear',
-                            position: 'left',
-                            ticks: {
-                                beginAtZero: true,
+                            {
+                                id: 'E',
+                                type: 'linear',
+                                position: 'left',
+                                ticks: {
+                                    beginAtZero: true,
+                                }
+                            },
+                            {
+                                id: 'F',
+                                type: 'linear',
+                                pointStyle: 'roundRot',
+                                ticks: {
+                                    beginAtZero: true,
+                                }
                             }
-                        }]
+                        ]
                     },
                     maintainAspectRatio: true,
                 }}

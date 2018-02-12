@@ -33,6 +33,14 @@ class Reading(models.Model):
     value_bperf = models.FloatField(default=0)
     value_rr = models.IntegerField(default=0)
     value_hrv = models.IntegerField(default=0)
+    value_fvc = models.FloatField(default=0)
+    value_fvc_predicted = models.IntegerField(default=0)
+    value_fev1 = models.FloatField(default=0)
+    value_fev1_predicted = models.IntegerField(default=0)
+    value_ratio = models.FloatField(default=0)
+    value_ratio_predicted = models.IntegerField(default=0)
+    value_pef = models.FloatField(default=0)
+    value_duration = models.FloatField(default=0)
 
     def __str__(self):
         return str(self.value_hr) + ": " + str(self.value_hrv)
