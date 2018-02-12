@@ -9,6 +9,7 @@ __pycache__/
 
 # C extensions
 *.so
+database_settings.py
 
 everion/my_uploads/
 
