@@ -211,6 +211,8 @@ def read_from_api(request):
                 ds = requests.get(user_url, headers=headers, cookies=login.cookies)
                 readings = Reading.objects.filter(patient=patient)
                 for data in ds.json():
+                    filename = data['c_measurement_type']
+                    cumulative = 0
                     for value in data['c_arrayvalue']:
                         how_many_at_once += 1
                         if how_many_at_once > 1000:
@@ -226,7 +228,6 @@ def read_from_api(request):
                             value = float(value)
                             quality = float(quality)
                             #print(counter, timestamp, value, quality)
-                            filename = data['c_measurement_type']
                             timestamp_iso = time.strftime('%Y-%m-%dT%H:%M:%S', time.localtime(timestamp))
                             time_dt = tz.localize(dateutil.parser.parse(timestamp_iso))
                             patient.last_update = timestamp_iso[:19]
@@ -239,19 +240,19 @@ def read_from_api(request):
                                 reading.time_iso = timestamp_iso
                                 reading.time_epoch = timestamp
                                 reading.time = time_dt
-                                if "_hr_" in filename:
+                                if "hr" == filename:
                                     reading.value_hr = int(value)
-                                if "_spo2_" in filename:
+                                if "spo2" == filename:
                                     reading.value_spo2 = int(value)
-                                if "_rr_" in filename:
+                                if "rr" == filename:
                                     reading.value_rr = int(value)
-                                if "_hrv_" in filename:
+                                if "hrv" == filename:
                                     reading.value_hrv = int(value)
-                                if "_bperf_" in filename:
+                                if "bperf" == filename:
                                     reading.value_bperf = value
-                                if "_activity_" in filename:
+                                if "activity" == filename:
                                     reading.value_activity = value + cumulative
-                                if "_steps_" in filename:
+                                if "steps" == filename:
                                     reading.value_steps = int(value + cumulative)
                                 cumulative = 0
                                 try:
