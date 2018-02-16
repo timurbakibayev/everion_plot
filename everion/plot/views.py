@@ -231,6 +231,8 @@ def read_from_api(request):
                             timestamp_iso = time.strftime('%Y-%m-%dT%H:%M:%S', time.localtime(timestamp))
                             time_dt = tz.localize(dateutil.parser.parse(timestamp_iso))
                             patient.last_update = timestamp_iso[:19]
+                            if how_many_at_once < 30:
+                                print("next",timestamp,timestamp_iso)
                             if timestamp_iso[-2:] == "00":
                                 try:
                                     reading = readings.get(time_iso=timestamp_iso)
@@ -262,8 +264,9 @@ def read_from_api(request):
                                     print(e)
                             else:
                                 cumulative += value
-                        except:
-                            pass
+                        except Exception as e:
+                            if how_many_at_once < 30:
+                                print("another exception:",e)
                 # save last update info
                 patient.save()
     return render(request, 'generate_dummies.html',
