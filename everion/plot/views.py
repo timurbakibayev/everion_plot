@@ -4,6 +4,8 @@ import dateutil.parser
 import datetime
 import pytz
 import random
+import requests
+import json
 tz = pytz.timezone('Asia/Almaty')
 # Create your views here.
 def plotter(request):
@@ -163,3 +165,60 @@ def generate_dummies(request):
     return render(request, 'generate_dummies.html',
                   {"message": "Did not add anything, all patients have data, number of readings: " + str(len(Reading.objects.all())) +
                               ", fails: " + str(fails)})
+
+
+def read_from_api(request):
+    url_login = "https://devcloudapi.biovotion.com/login"
+    url_users = "https://devcloudapi.biovotion.com/v1/orgs/apmkz-01/users"
+    url_datasources = "https://devcloudapi.biovotion.com/v1/orgs/apmkz-01/users/{userId}/datasources/vs"
+    cred = '{"user":"timurbakibayev@gmail.com",' + \
+           '"password":"mkoda5918",' + \
+           '"provider":"apmkz-01"}'
+    headers = {"Content-Type": "application/json"}
+    print("trying to login")
+    login = requests.post(url_login, data=cred, headers=headers)
+    print("login response:")
+    print(login)
+    print()
+    if not "LOGIN_OK" in login.text:
+        return render(request, 'generate_dummies.html',
+                      {"message": "We have a problem with login: " + login.text})
+    fails = 0
+
+    for patient in Patient.objects.all():
+        # here we will make a request for each patient
+        print("trying to fetch users")
+        users_req = requests.get(url_users, headers=headers, cookies=login.cookies)
+        print("result:")
+        print(users_req)
+        print("users:")
+        users = users_req.json()
+        for user in users:
+            print("------------------------------")
+            print("another user:")
+            print(user)
+            print("trying to fetch events")
+            # if user["name"]["first"] == "Timur":
+            user_id = user["_id"]
+            print("found", user["name"]["first"], ", id==", user_id)
+            user_url = url_datasources.replace("{userId}", user_id)
+            user_url += "?from=1518710000"
+            user_url += "&to=" + str(int(datetime.datetime.timestamp(datetime.datetime.now())))
+            print(user_url)
+            ds = requests.get(user_url, headers=headers, cookies=login.cookies)
+            # print(ds.text)
+            with open('data' + user["name"]["first"] + '.txt', 'w') as outfile:
+                json.dump(ds.json(), outfile)
+            for data in ds.json():
+                if data['c_measurement_type'] == 'hr':
+                    print("Found heart rate!")
+                    for value in data['c_arrayvalue']:
+                        try:
+                            counter, timestamp, value, quality = value['c_value']
+                            counter = int(counter)
+                            timestamp = int(timestamp)
+                            value = float(value)
+                            quality = float(quality)
+                            print(counter, timestamp, value, quality)
+                        except:
+                            pass

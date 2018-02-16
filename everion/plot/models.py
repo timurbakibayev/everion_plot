@@ -7,6 +7,8 @@ class Patient(models.Model):
     name = models.CharField(max_length=200)
     birthday = models.DateField(null=True, blank=True)
     last_update = models.CharField(max_length=19, default="2018-01-20T01:00:00")
+    last_update_epoch = models.IntegerField()
+    phone_no = models.CharField(max_length=12, default="+7")
     dummy = models.BooleanField(default=False)
     limits_hr_min = models.FloatField(default=70)
     limits_hr_max = models.FloatField(default=110)
