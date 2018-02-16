@@ -6,6 +6,7 @@ import pytz
 import random
 import requests
 import json
+import time
 tz = pytz.timezone('Asia/Almaty')
 # Create your views here.
 def plotter(request):
@@ -176,7 +177,11 @@ def read_from_api(request):
            '"provider":"apmkz-01"}'
     headers = {"Content-Type": "application/json"}
     print("trying to login")
-    login = requests.post(url_login, data=cred, headers=headers)
+    try:
+        login = requests.post(url_login, data=cred, headers=headers, timeout=3)
+    except:
+        return render(request, 'generate_dummies.html',
+                      {"message": "Failed to login, api not available :("})
     print("login response:")
     print(login)
     print()
@@ -184,41 +189,81 @@ def read_from_api(request):
         return render(request, 'generate_dummies.html',
                       {"message": "We have a problem with login: " + login.text})
     fails = 0
+    print("trying to fetch users")
+    users_req = requests.get(url_users, headers=headers, cookies=login.cookies)
+    print("result:")
+    print(users_req)
+    print("users:")
+    users = users_req.json()
+
+    how_many_at_once = 0
 
     for patient in Patient.objects.all():
         # here we will make a request for each patient
-        print("trying to fetch users")
-        users_req = requests.get(url_users, headers=headers, cookies=login.cookies)
-        print("result:")
-        print(users_req)
-        print("users:")
-        users = users_req.json()
         for user in users:
-            print("------------------------------")
-            print("another user:")
-            print(user)
-            print("trying to fetch events")
-            # if user["name"]["first"] == "Timur":
-            user_id = user["_id"]
-            print("found", user["name"]["first"], ", id==", user_id)
-            user_url = url_datasources.replace("{userId}", user_id)
-            user_url += "?from=1518710000"
-            user_url += "&to=" + str(int(datetime.datetime.timestamp(datetime.datetime.now())))
-            print(user_url)
-            ds = requests.get(user_url, headers=headers, cookies=login.cookies)
-            # print(ds.text)
-            with open('data' + user["name"]["first"] + '.txt', 'w') as outfile:
-                json.dump(ds.json(), outfile)
-            for data in ds.json():
-                if data['c_measurement_type'] == 'hr':
-                    print("Found heart rate!")
+            if user["mobile"] == patient.phone_no:
+                user_id = user["_id"]
+                print("trying to fetch events for", user["name"]["first"], ", id==", user_id)
+                user_url = url_datasources.replace("{userId}", user_id)
+                user_url += "?from=" + str(patient.last_update_epoch) # 1518710000
+                user_url += "&to=" + str(int(datetime.datetime.timestamp(datetime.datetime.now())))
+                print(user_url)
+                ds = requests.get(user_url, headers=headers, cookies=login.cookies)
+                readings = Reading.objects.filter(patient=patient)
+                for data in ds.json():
                     for value in data['c_arrayvalue']:
+                        how_many_at_once += 1
+                        if how_many_at_once > 1000:
+                            patient.save()
+                            return render(request, 'generate_dummies.html',
+                                          {"message": "Successfully imported 1000 records, stopped on " +
+                                                      user["name"]["first"] + " " + user["name"]["last"]})
                         try:
                             counter, timestamp, value, quality = value['c_value']
                             counter = int(counter)
-                            timestamp = int(timestamp)
+                            patient.last_update_epoch = int(timestamp)
+                            timestamp = int(timestamp) + 6 * 60 * 60
                             value = float(value)
                             quality = float(quality)
-                            print(counter, timestamp, value, quality)
+                            #print(counter, timestamp, value, quality)
+                            filename = data['c_measurement_type']
+                            timestamp_iso = time.strftime('%Y-%m-%dT%H:%M:%S', time.localtime(timestamp))
+                            time_dt = tz.localize(dateutil.parser.parse(timestamp_iso))
+                            patient.last_update = timestamp_iso[:19]
+                            if timestamp_iso[-2:] == "00":
+                                try:
+                                    reading = readings.get(time_iso=timestamp_iso)
+                                except:
+                                    reading = Reading()
+                                reading.patient_id = patient.id
+                                reading.time_iso = timestamp_iso
+                                reading.time_epoch = timestamp
+                                reading.time = time_dt
+                                if "_hr_" in filename:
+                                    reading.value_hr = int(value)
+                                if "_spo2_" in filename:
+                                    reading.value_spo2 = int(value)
+                                if "_rr_" in filename:
+                                    reading.value_rr = int(value)
+                                if "_hrv_" in filename:
+                                    reading.value_hrv = int(value)
+                                if "_bperf_" in filename:
+                                    reading.value_bperf = value
+                                if "_activity_" in filename:
+                                    reading.value_activity = value + cumulative
+                                if "_steps_" in filename:
+                                    reading.value_steps = int(value + cumulative)
+                                cumulative = 0
+                                try:
+                                    reading.save()
+                                except Exception as e:
+                                    print("failed to save")
+                                    print(e)
+                            else:
+                                cumulative += value
                         except:
                             pass
+                # save last update info
+                patient.save()
+    return render(request, 'generate_dummies.html',
+                  {"message": "Job is complete. Imported: " + str(how_many_at_once) + " records."})

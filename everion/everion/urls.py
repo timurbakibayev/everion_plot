@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^$', views.index),
     url(r'^plot$', views.plotter),
     url(r'^generate$', views.generate_dummies),
+    url(r'^read_api$', views.read_from_api),
     url(r'^api/patients/$', views_rest_patient.patient_list),
     url(r'^api/web/put/(?P<id>[0-9]+)/(?P<date>[0-9-]+)T(?P<time>[0-9:]+)$', views.web_put),
     url(r'^api/patients/(?P<id>[0-9]+)/$', views_rest_patient.patient_details),
