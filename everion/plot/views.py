@@ -216,12 +216,7 @@ def read_from_api(request):
                     filename = data['c_measurement_type']
                     cumulative = 0
                     for value in data['c_arrayvalue']:
-                        how_many_at_once += 1
-                        if how_many_at_once > 1000:
-                            patient.save()
-                            return render(request, 'generate_dummies.html',
-                                          {"message": "Successfully imported 1000 records, stopped on " +
-                                                      user["name"]["first"] + " " + user["name"]["last"]})
+
                         try:
                             counter, timestamp, value, quality = value['c_value']
                             counter = int(counter)
@@ -233,9 +228,16 @@ def read_from_api(request):
                             timestamp_iso = time.strftime('%Y-%m-%dT%H:%M:%S', time.localtime(timestamp))
                             time_dt = tz.localize(dateutil.parser.parse(timestamp_iso))
                             patient.last_update = timestamp_iso[:19]
-                            if how_many_at_once < 30:
-                                print("next",timestamp,timestamp_iso)
+
                             if timestamp_iso[-2:] == "00":
+                                how_many_at_once += 1
+                                if how_many_at_once > 1000:
+                                    patient.save()
+                                    return render(request, 'generate_dummies.html',
+                                                  {"message": "Successfully imported 1000 records, stopped on " +
+                                                              user["name"]["first"] + " " + user["name"]["last"]})
+                                if how_many_at_once < 30:
+                                    print("next", timestamp, timestamp_iso)
                                 try:
                                     reading = readings.get(time_iso=timestamp_iso)
                                     if how_many_at_once < 30:
