@@ -207,7 +207,7 @@ def read_from_api(request):
                 user_url = url_datasources.replace("{userId}", user_id)
                 user_url += "?from=" + str(patient.last_update_epoch) # 1518710000
                 to_epoch = min(int(datetime.datetime.timestamp(datetime.datetime.now())),
-                               patient.last_update_epoch + 10000)
+                               patient.last_update_epoch + 5000)
                 user_url += "&to=" + str(to_epoch)
                 print(user_url)
                 ds = requests.get(user_url, headers=headers, cookies=login.cookies)
