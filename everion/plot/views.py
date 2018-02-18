@@ -212,11 +212,11 @@ def read_from_api(request):
                 print(user_url)
                 ds = requests.get(user_url, headers=headers, cookies=login.cookies)
                 readings = Reading.objects.filter(patient=patient)
+                print(ds.json())
                 for data in ds.json():
                     filename = data['c_measurement_type']
                     cumulative = 0
                     for value in data['c_arrayvalue']:
-
                         try:
                             counter, timestamp, value, quality = value['c_value']
                             counter = int(counter)
