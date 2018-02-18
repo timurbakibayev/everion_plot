@@ -206,7 +206,9 @@ def read_from_api(request):
                 print("trying to fetch events for", user["name"]["first"], ", id==", user_id)
                 user_url = url_datasources.replace("{userId}", user_id)
                 user_url += "?from=" + str(patient.last_update_epoch) # 1518710000
-                user_url += "&to=" + str(int(datetime.datetime.timestamp(datetime.datetime.now())))
+                to_epoch = min(int(datetime.datetime.timestamp(datetime.datetime.now())),
+                               patient.last_update_epoch + 10000)
+                user_url += "&to=" + str(to_epoch)
                 print(user_url)
                 ds = requests.get(user_url, headers=headers, cookies=login.cookies)
                 readings = Reading.objects.filter(patient=patient)
