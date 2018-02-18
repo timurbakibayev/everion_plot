@@ -236,8 +236,12 @@ def read_from_api(request):
                             if timestamp_iso[-2:] == "00":
                                 try:
                                     reading = readings.get(time_iso=timestamp_iso)
+                                    if how_many_at_once < 30:
+                                        print("found")
                                 except:
                                     reading = Reading()
+                                    if how_many_at_once < 30:
+                                        print("new")
                                 reading.patient_id = patient.id
                                 reading.time_iso = timestamp_iso
                                 reading.time_epoch = timestamp
