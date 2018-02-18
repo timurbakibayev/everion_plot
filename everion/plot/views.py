@@ -212,7 +212,7 @@ def read_from_api(request):
                 print(user_url)
                 ds = requests.get(user_url, headers=headers, cookies=login.cookies)
                 readings = Reading.objects.filter(patient=patient)
-                print(ds.json())
+                # print(ds.json())
                 for data in ds.json():
                     filename = data['c_measurement_type']
                     cumulative = 0
