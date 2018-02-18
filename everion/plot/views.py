@@ -229,7 +229,7 @@ def read_from_api(request):
                             time_dt = tz.localize(dateutil.parser.parse(timestamp_iso))
                             patient.last_update = timestamp_iso[:19]
 
-                            if timestamp_iso[-2:] == "00":
+                            if timestamp_iso[-2:] == "00" or counter % 20 == 0:
                                 how_many_at_once += 1
                                 if how_many_at_once > 1000:
                                     patient.save()
