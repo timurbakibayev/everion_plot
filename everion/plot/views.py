@@ -274,6 +274,10 @@ def read_from_api(request):
                             if how_many_at_once < 30:
                                 print("another exception:",e)
                 # save last update info
+                patient.last_update_epoch = to_epoch
+                timestamp = int(to_epoch) + 6 * 60 * 60
+                timestamp_iso = time.strftime('%Y-%m-%dT%H:%M:%S', time.localtime(timestamp))
+                patient.last_update = timestamp_iso[:19]
                 patient.save()
     return render(request, 'generate_dummies.html',
                   {"message": "Job is complete. Imported: " + str(how_many_at_once) + " records."})
