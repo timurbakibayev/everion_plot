@@ -212,74 +212,79 @@ def read_from_api(request):
                 print(user_url)
                 ds = requests.get(user_url, headers=headers, cookies=login.cookies)
                 readings = Reading.objects.filter(patient=patient)
+                cache = {}
                 # print(ds.json())
                 for data in ds.json():
-                    filename = data['c_measurement_type']
+                    measurement_type = data['c_measurement_type']
                     cumulative = 0
                     for value in data['c_arrayvalue']:
                         try:
                             counter, timestamp, value, quality = value['c_value']
                             counter = int(counter)
-                            patient.last_update_epoch = int(timestamp)
+                            original_timestamp = timestamp
                             timestamp = int(timestamp) + 6 * 60 * 60
                             value = float(value)
                             quality = float(quality)
-                            #print(counter, timestamp, value, quality)
                             timestamp_iso = time.strftime('%Y-%m-%dT%H:%M:%S', time.localtime(timestamp))
                             time_dt = tz.localize(dateutil.parser.parse(timestamp_iso))
-                            patient.last_update = timestamp_iso[:19]
-
-                            if timestamp_iso[-2:] == "00" or counter % 20 == 0:
-                                how_many_at_once += 1
-                                if how_many_at_once > 1000:
-                                    patient.save()
-                                    return render(request, 'generate_dummies.html',
-                                                  {"message": "Successfully imported 1000 records, stopped on " +
-                                                              user["name"]["first"] + " " + user["name"]["last"]})
-                                if how_many_at_once < 30:
-                                    print("next", timestamp, timestamp_iso)
-                                try:
-                                    reading = readings.get(time_iso=timestamp_iso)
-                                    if how_many_at_once < 30:
-                                        print("found")
-                                except:
-                                    reading = Reading()
-                                    if how_many_at_once < 30:
-                                        print("new")
-                                reading.patient_id = patient.id
-                                reading.time_iso = timestamp_iso
-                                reading.time_epoch = timestamp
-                                reading.time = time_dt
-                                if "hr" == filename:
-                                    reading.value_hr = int(value)
-                                if "spo2" == filename:
-                                    reading.value_spo2 = int(value)
-                                if "rr" == filename:
-                                    reading.value_rr = int(value)
-                                if "hrv" == filename:
-                                    reading.value_hrv = int(value)
-                                if "bperf" == filename:
-                                    reading.value_bperf = value
-                                if "activity" == filename:
-                                    reading.value_activity = value + cumulative
-                                if "steps" == filename:
-                                    reading.value_steps = int(value + cumulative)
+                            if timestamp_iso[-2:] == "00" or timestamp_iso[-2:] == "30":
+                                if timestamp_iso not in cache:
+                                    cache[timestamp_iso] = {}
+                                if measurement_type in ["hr","spo2","rr","hrv"]:
+                                    cache[timestamp_iso][measurement_type] = int(value)
+                                elif measurement_type == "bperf":
+                                    cache[timestamp_iso][measurement_type] = value
+                                elif measurement_type == "activity":
+                                    cache[timestamp_iso][measurement_type] = value + cumulative
+                                elif measurement_type == "steps":
+                                    cache[timestamp_iso][measurement_type] = int(value + cumulative)
                                 cumulative = 0
-                                try:
-                                    reading.save()
-                                except Exception as e:
-                                    print("failed to save")
-                                    print(e)
+                                cache[timestamp_iso]["original_timestamp"] = original_timestamp
+                                cache[timestamp_iso]["time_iso"] = timestamp_iso
+                                cache[timestamp_iso]["time_epoch"] = timestamp
+                                cache[timestamp_iso]["time"] = time_dt
                             else:
                                 cumulative += value
                         except Exception as e:
                             if how_many_at_once < 30:
                                 print("another exception:",e)
-                # save last update info
-                patient.last_update_epoch = to_epoch
-                timestamp = int(to_epoch) + 6 * 60 * 60
-                timestamp_iso = time.strftime('%Y-%m-%dT%H:%M:%S', time.localtime(timestamp))
-                patient.last_update = timestamp_iso[:19]
+                for line in cache:
+                    try:
+                        reading = Reading()
+                        reading.patient_id = patient.id
+                        reading.time_iso = line["time_iso"]
+                        reading.time_epoch = line["time_epoch"]
+                        reading.time = line["time"]
+                        if "hr" in line:
+                            reading.value_hr = line["hr"]
+                        if "hrv" in line:
+                            reading.value_hrv = line["hrv"]
+                        if "spo2" in line:
+                            reading.value_spo2 = line["spo2"]
+                        if "rr" in line:
+                            reading.value_rr = line["rr"]
+                        if "bperf" in line:
+                            reading.value_bperf = line["bperf"]
+                        if "activity" in line:
+                            reading.value_activity = line["activity"]
+                        if "steps" in line:
+                            reading.value_steps = line["steps"]
+                        reading.save()
+                        if line["original_timestamp"] > patient.last_update_epoch:
+                            patient.last_update = line["time_iso"]
+                            patient.last_update_epoch = line["original_timestamp"]
+                        how_many_at_once += 1
+                        if how_many_at_once > 1000:
+                            patient.save()
+                            return render(request, 'generate_dummies.html',
+                                          {"message": "Successfully imported 1000 records, stopped on " +
+                                                      user["name"]["first"] + " " + user["name"]["last"]})
+                        if how_many_at_once < 30:
+                            print("saved:", line["original_timestamp"], line)
+                    except Exception as e:
+                        print("failed to save", line)
+                        print(e)
                 patient.save()
+
     return render(request, 'generate_dummies.html',
                   {"message": "Job is complete. Imported: " + str(how_many_at_once) + " records."})
