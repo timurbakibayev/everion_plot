@@ -205,7 +205,7 @@ def read_from_api(request):
                 user_id = user["_id"]
                 print("trying to fetch events for", user["name"]["first"], ", id==", user_id)
                 user_url = url_datasources.replace("{userId}", user_id)
-                user_url += "?from=" + str(patient.last_update_epoch + 1) # 1518710000
+                user_url += "?from=" + str(patient.last_update_epoch + 10) # 1518710000
                 to_epoch = min(int(datetime.datetime.timestamp(datetime.datetime.now())),
                                patient.last_update_epoch + 5000)
                 user_url += "&to=" + str(to_epoch)
@@ -227,7 +227,7 @@ def read_from_api(request):
                             quality = float(quality)
                             timestamp_iso = time.strftime('%Y-%m-%dT%H:%M:%S', time.localtime(timestamp))
                             time_dt = tz.localize(dateutil.parser.parse(timestamp_iso))
-                            if timestamp_iso[-2:] == "00" or timestamp_iso[-2:] == "30":
+                            if timestamp_iso[-1:] == "0":
                                 if timestamp_iso not in cache:
                                     cache[timestamp_iso] = {}
                                 if measurement_type in ["hr","spo2","rr","hrv"]:
