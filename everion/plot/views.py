@@ -246,9 +246,10 @@ def read_from_api(request):
                             else:
                                 cumulative += value
                         except Exception as e:
-                            if how_many_at_once < 30:
+                            if "not enough values" not in str(e):
                                 print("another exception:",e)
-                for line in cache:
+                for key in cache:
+                    line = cache[key]
                     try:
                         reading = Reading()
                         reading.patient_id = patient.id
