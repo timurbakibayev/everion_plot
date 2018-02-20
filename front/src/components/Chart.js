@@ -20,39 +20,57 @@ export default class Chart extends Component {
                         displayColors: true,
                     },
                     scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true
+                                },
+                                id: 'A',
+                                type: 'linear',
+                                position: 'left',
+                                ticks: {
+                                    beginAtZero: true,
+                                    max: 130,
+                                    min: 0
+                                },
+                                // scaleLabel: {
+                                //     display: true,
+                                //     labelString: 'Пульс'
+                                // }
                             },
-                            id: 'A',
-                            type: 'linear',
-                            position: 'left',
-                        }, {
-                            id: 'D',
-                            ticks: {
-                                beginAtZero: true
+                            {
+                                id: 'D',
+                                ticks: {
+                                    beginAtZero: true
+                                },
+                                type: 'linear',
+                                position: 'left',
+                                ticks: {
+                                    beginAtZero: true,
+                                    max: 100,
+                                    min: 0
+                                }
                             },
-                            type: 'linear',
-                            position: 'left',
-                        }, {
-                            id: 'B',
-                            type: 'linear',
-                            position: 'right',
-                            ticks: {
-                                beginAtZero: true,
-                                max: 30,
-                                min: 0
-                            }
-                        }, {
-                            id: 'C',
-                            type: 'linear',
-                            position: 'right',
-                            ticks: {
-                                beginAtZero: true,
-                                max: 1,
-                                min: 0
-                            }
-                        },
+                            {
+                                id: 'B',
+                                type: 'linear',
+                                position: 'right',
+                                ticks: {
+                                    beginAtZero: true,
+                                    max: 30,
+                                    min: 0
+                                }
+                            },
+                            {
+                                id: 'C',
+                                type: 'linear',
+                                position: 'right',
+                                ticks: {
+                                    beginAtZero: true,
+                                    max: 1,
+                                    min: 0
+                                }
+                            },
                             {
                                 id: 'E',
                                 type: 'linear',

@@ -43,7 +43,6 @@ const styles = {
     },
 };
 
-var t;
 
 class _PatientCardComponent extends Component {
     loading = this.props.settings.language === "russian" ? "Загружается..." : "Loading...";
@@ -83,6 +82,18 @@ class _PatientCardComponent extends Component {
         let data_steps = [];
 
         const data = this.props.readings;
+
+        var max_activity = 1;
+        var max_steps = 1;
+
+        for (let i = 0; i < data.length; i++) {
+            if (max_activity < data[i].value_activity) {
+                max_activity = data[i].value_activity;
+            }
+            if (max_steps < data[i].value_steps) {
+                max_steps = data[i].value_steps;
+            }
+        }
         for (let i = 0; i < data.length; i++) {
 
             if (data[i].value_fev1_predicted !== 0) {
@@ -142,7 +153,7 @@ class _PatientCardComponent extends Component {
             }
 
             if (data[i].value_activity !== 0) {
-                data_activity.push({x: i, y: data[i].value_activity});
+                data_activity.push({x: i, y: data[i].value_activity/max_activity*10});
             } else {
                 data_activity.push({x: i, y: NaN});
             }
@@ -153,7 +164,7 @@ class _PatientCardComponent extends Component {
                 data_hrv.push({x: i, y: NaN});
             }
 
-            data_steps.push({x: i, y: data[i].value_steps});
+            data_steps.push({x: i, y: data[i].value_steps / max_steps * 20});
 
             newLabels.push(data[i].time_iso.replace("T", ", "));
         }
@@ -165,102 +176,83 @@ class _PatientCardComponent extends Component {
                     label: "Пульс",
                     yAxisID: "A",
                     data: data_hr,
-                    backgroundColor:
-                        'rgba(180,35,132, 0.5)',
+                    backgroundColor: 'rgba(180,35,132, 0.5)',
                     borderColor: [
                         'rgba(180,35,132, 0.7)',
 
                     ],
                     pointRadius: point_radius_hr,
-                    fill:false,
+                    fill: false,
                 },
                 {
                     yAxisID: "D",
                     label: "Кислород",
                     data: data_spo2,
-                    backgroundColor:
-                        'rgba(35,35,132, 0.5)',
+                    backgroundColor: 'rgba(35,35,132, 0.5)',
                     borderColor: [
                         'rgba(35,35,132, 0.8)',
 
                     ],
                     pointRadius: point_radius_spo2,
-                    fill:false,
+                    fill: false,
                 },
                 {
-                    yAxisID: "E",
+                    yAxisID: "A",
                     label: "Активность",
                     data: data_activity,
-                    backgroundColor:
-                        'rgba(35,132,52, 0.5)',
+                    backgroundColor: 'rgba(35,132,52, 0.5)',
                     borderColor: [
                         'rgba(35,132,52, 0.8)',
 
                     ],
-                    fill:false,
+                    fill: false,
                 },
                 {
                     yAxisID: "C",
                     label: "Перфузия",
                     data: data_bperf,
-                    backgroundColor:
-                        'rgba(135,102,92, 0.5)',
+                    backgroundColor: 'rgba(135,102,92, 0.5)',
                     borderColor: [
                         'rgba(125,102,92, 0.8)',
 
                     ],
                     pointRadius: point_radius_bperf,
-                    fill:false,
+                    fill: false,
                 },
                 {
-                    yAxisID: "B",
+                    yAxisID: "A",
                     label: "Дыхание",
                     data: data_rr,
-                    backgroundColor:
-                        'rgba(85,132,252, 0.5)',
+                    backgroundColor: 'rgba(85,132,252, 0.5)',
                     borderColor: [
                         'rgba(85,132,252, 0.8)',
 
                     ],
                     pointRadius: point_radius_rr,
-                    fill:false,
+                    fill: false,
                 },
                 {
                     yAxisID: "A",
                     label: "Равномерность",
                     data: data_hrv,
-                    backgroundColor:
-                        'rgba(185,132,252, 0.5)',
+                    backgroundColor: 'rgba(185,132,252, 0.5)',
                     borderColor: [
                         'rgba(185,132,252, 0.8)',
 
                     ],
-                    fill:false,
+                    fill: false,
                 },
                 {
-                    //yAxisID: "B",
+                    yAxisID: "A",
                     label: "Шаги",
                     data: data_steps,
-                    backgroundColor:
-                        'rgba(244,107,62, 0.5)',
+                    backgroundColor: 'rgba(244,107,62, 0.5)',
                     borderColor: [
                         'rgba(244,107,62, 0.8)',
 
                     ],
-                    fill:false,
-                },
-                {
-                    yAxisID: "F",
-                    label: "FEV1",
-                    data: data_fev1_predicted,
-                    backgroundColor:
-                        'rgba(244,107,62, 0.5)',
-                    borderColor: [
-                        'rgba(244,107,62, 0.8)',
-                    ],
-                    pointRadius: 10,
-                    fill:false,
-                },
+                    fill: false,
+                }
             ]
         })
     }
@@ -269,11 +261,11 @@ class _PatientCardComponent extends Component {
         //this.props.refreshCurrentCompany(this.props.patientItem.company);
         this.setState({mounted: true});
         //console.log("PatientCard Component Will Mount", this.props);
-        this.props.refreshReadings(this.props.id).then(
-            response => {
-                t = false
-            }
-        );
+        this.props.refreshReadings(this.props.id);
+        let that = this;
+        setInterval(function () {
+            that.props.refreshReadings(that.props.id);
+        }, 120 * 1000);
     }
 
 

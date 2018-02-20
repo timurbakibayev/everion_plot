@@ -1,0 +1,80 @@
+{% load staticfiles %}
+<html>
+<head>
+    <title>PMA Everion Chart</title>
+    <link rel="stylesheet" href="/static/style1.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+{{ message }}
+
+<h1>Automatic Biovotion Data Importer</h1>
+
+<h1>
+
+</h1>
+<div id="current">
+
+</div>
+
+<div id="data">
+    No data yet
+</div>
+
+
+<script language="JavaScript">
+    var a = [];
+    console.log("start");
+
+    makeQuery();
+    setInterval(function () {
+        makeQuery();
+    }, 120 * 1000);
+
+    function displayResults() {
+        console.log("In function");
+        var outHtml = "<table class='table'><thead><tr> <th>Start</th> <th>End</th> <th>Data</th> <th>Status</th> </tr> </thead>";
+        for (var i = 0; i < a.length; i++) {
+            outHtml += "<tr>";
+            outHtml += "<td>" + a[i].start + "</td>";
+            outHtml += "<td>" + a[i].end + "</td>";
+            outHtml += "<td>" + a[i].data + "</td>";
+            outHtml += "<td>" + a[i].status + "</td>";
+            outHtml += "</tr>";
+        }
+        outHtml += "</table>"
+        $("#data").html(outHtml);
+    }
+
+    function makeQuery() {
+        var dt = new Date();
+        var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+        var newData = {start: time}
+        $("#current").html("Started a query: " + time);
+        $.get("http://cloudoc.kz/read_api", function (data, status) {
+            console.log("Data: " + data + "\nStatus: " + status);
+            dt = new Date();
+            time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+            newData["data"] = data;
+            newData["status"] = status;
+            newData["end"] = time;
+            a.unshift(newData);
+            displayResults();
+            $("#current").html("Last query " + status);
+        });
+    }
+</script>
+</body>
+</html>

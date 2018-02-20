@@ -12,6 +12,10 @@ tz = pytz.timezone('Asia/Almaty')
 def plotter(request):
     return render(request, 'plot.html', {})
 
+def automate(request):
+    return render(request, 'automate.html', {})
+
+
 def index(request):
     return render(request, 'index.html', {})
 
