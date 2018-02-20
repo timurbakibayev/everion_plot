@@ -51,16 +51,16 @@ export default class Chart extends Component {
                                     min: 0
                                 }
                             },
-                            {
-                                id: 'B',
-                                type: 'linear',
-                                position: 'right',
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 30,
-                                    min: 0
-                                }
-                            },
+                            // {
+                            //     id: 'B',
+                            //     type: 'linear',
+                            //     position: 'right',
+                            //     ticks: {
+                            //         beginAtZero: true,
+                            //         max: 30,
+                            //         min: 0
+                            //     }
+                            // },
                             {
                                 id: 'C',
                                 type: 'linear',
@@ -71,22 +71,22 @@ export default class Chart extends Component {
                                     min: 0
                                 }
                             },
-                            {
-                                id: 'E',
-                                type: 'linear',
-                                position: 'left',
-                                ticks: {
-                                    beginAtZero: true,
-                                }
-                            },
-                            {
-                                id: 'F',
-                                type: 'linear',
-                                pointStyle: 'roundRot',
-                                ticks: {
-                                    beginAtZero: true,
-                                }
-                            }
+                            // {
+                            //     id: 'E',
+                            //     type: 'linear',
+                            //     position: 'left',
+                            //     ticks: {
+                            //         beginAtZero: true,
+                            //     }
+                            // },
+                            // {
+                            //     id: 'F',
+                            //     type: 'linear',
+                            //     pointStyle: 'roundRot',
+                            //     ticks: {
+                            //         beginAtZero: true,
+                            //     }
+                            // }
                         ]
                     },
                     maintainAspectRatio: true,
