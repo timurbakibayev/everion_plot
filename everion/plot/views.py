@@ -203,7 +203,7 @@ def read_from_api(request):
         for user in users:
             if user["mobile"] == patient.phone_no:
                 user_id = user["_id"]
-                print("trying to fetch events for", user["name"]["first"], ", id==", user_id)
+                print("trying to fetch events for", user["mobile"], ", id ==", user_id)
                 user_url = url_datasources.replace("{userId}", user_id)
                 user_url += "?from=" + str(patient.last_update_epoch + 10) # 1518710000
                 to_epoch = min(int(datetime.datetime.timestamp(datetime.datetime.now())),
