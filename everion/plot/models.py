@@ -69,3 +69,14 @@ class Attachment(models.Model):
 
     class Meta:
         ordering = ["-file_name"]
+
+
+class ApiLog(models.Model):
+    date = models.DateTimeField(auto_now_add=True)
+    description = models.CharField(max_length=2000)
+
+    def __str__(self):
+        return self.description
+
+    class Meta:
+        ordering = ["-date"]

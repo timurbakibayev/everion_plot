@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^$', views.index),
     url(r'^plot$', views.plotter),
     url(r'^generate$', views.generate_dummies),
+    url(r'^apilog', views.apilog),
     url(r'^automate$', views.automate),
     url(r'^read_api$', views.read_from_api),
     url(r'^api/patients/$', views_rest_patient.patient_list),

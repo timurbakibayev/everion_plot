@@ -16,6 +16,10 @@ def automate(request):
     return render(request, 'automate.html', {})
 
 
+def apilog(request):
+    return render(request, 'apilog.html', {"ApiLogs": ApiLog.objects.all()})
+
+
 def index(request):
     return render(request, 'index.html', {})
 

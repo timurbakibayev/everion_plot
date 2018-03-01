@@ -1,0 +1,10 @@
+<html>
+<table>
+    {% for apiLog in ApiLogs %}
+    <tr>
+        <td>{{ apiLog.date }}</td>
+        <td>{{ apiLog.description }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</html>
