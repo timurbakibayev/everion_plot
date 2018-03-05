@@ -54,7 +54,7 @@ def run_job():
                             ds = requests.get(user_url, headers=headers, cookies=login.cookies)
                             readings = Reading.objects.filter(patient=patient)
                             cache = {}
-                            log(ds.json()[:1000])
+                            log(str(ds.json())[:1000])
                             for data in ds.json():
                                 measurement_type = data['c_measurement_type']
                                 cumulative = 0
