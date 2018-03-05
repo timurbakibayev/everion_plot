@@ -14,22 +14,22 @@ def is_lock_free():
     try:
         lock_socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
     except:
-        cronjob.log("Running on windows, no control")
+        print("Running on windows, no control")
         return True
     try:
         lock_id = "timurbakibayev.api_everion"   # this should be unique. using your username as a prefix is a convention
         lock_socket.bind('\0' + lock_id)
-        cronjob.log("Acquired lock {}".format(lock_id))
+        print("Acquired lock {}".format(lock_id))
         return True
     except socket.error:
         # socket already locked, task must already be running
-        cronjob.log("Failed to acquire lock {}".format(lock_id))
+        print("Failed to acquire lock {}".format(lock_id))
         return False
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        cronjob.log("Trying to run. You have {} patients".format(len(Patient.objects.all())))
+        print("Trying to run. You have {} patients".format(len(Patient.objects.all())))
         if not is_lock_free():
             sys.exit()
 
