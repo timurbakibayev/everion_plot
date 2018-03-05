@@ -124,8 +124,8 @@ def run_job():
                                     log("failed to save" + str(line))
                                     log(e)
                             patient.save()
-        except:
-            log("Failed to login, api not available :(")
+        except Exception as e:
+            log("Error: " + str(e))
         time.sleep(40)
 
 run_job()
