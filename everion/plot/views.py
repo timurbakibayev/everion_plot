@@ -17,7 +17,7 @@ def automate(request):
 
 
 def apilog(request):
-    return render(request, 'apilog.html', {"ApiLogs": ApiLog.objects.all()})
+    return render(request, 'apilog.html', {"ApiLogs": ApiLog.objects.all()[:100]})
 
 
 def index(request):
